@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { uniqueId } from 'lodash';
 import { Table, Tabs } from 'antd';
 
 type Transaction = {
@@ -72,7 +73,7 @@ function List() {
     <Tabs defaultActiveKey="1">
       <TabPane tab="Transactions" key="1">
         <Table
-          rowKey={(record: Transaction) => record.id}
+          rowKey={(record: Transaction) => uniqueId('transaction_')}
           pagination={{ total }}
           onChange={handleTableChange}
           loading={loading}

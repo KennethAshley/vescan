@@ -1,10 +1,10 @@
-import React from 'react';
-import { Input, Select } from 'antd';
+import React, { Fragment } from 'react';
+import { Input, Select, Alert } from 'antd';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import VNS from 'vns-js';
 
 import { createConnex } from '../../create-connex';
-
 
 const SearchStyled = styled.div`
   flex: 1;
@@ -26,6 +26,7 @@ const selectBefore = (
 function Search() {
   const history = useHistory();
   const { connex } = createConnex('main');
+  const vns = new VNS(connex);
 
   async function handleSearch(value: string) {
     if (/^0x[0-9a-f]{40}$/i.test(value)) {
@@ -67,18 +68,28 @@ function Search() {
           console.log(err);
         }
       }
+    } else if (value.includes(".vet")) {
+      const address = await vns.lookup(value.slice(0, -4));
+      return history.push(`/account/${address}`);
     }
   }
   return (
-    <SearchStyled>
-      <Input.Search
-        addonBefore={selectBefore}
-        size="large"
-        enterButton="Search"
-        placeholder="Search blocks / tx / accounts"
-        onSearch={value => handleSearch(value)}
-      />
-    </SearchStyled>
+    <Fragment>
+
+      <Alert
+        style={{ marginBottom: '32px' }}
+        message="This project is in beta. Use at your own risk" type="info" closable />
+
+      <SearchStyled>
+        <Input.Search
+          addonBefore={selectBefore}
+          size="large"
+          enterButton="Search"
+          placeholder="Search blocks / tx / accounts / vns domains"
+          onSearch={value => handleSearch(value)}
+        />
+      </SearchStyled>
+    </Fragment>
   );
 }
 

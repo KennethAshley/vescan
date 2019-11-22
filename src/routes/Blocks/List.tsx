@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table } from 'antd';
+import { uniqueId } from 'lodash';
 
 type Block = {
   id: string
@@ -67,7 +68,7 @@ function Blocks() {
 
   return (
     <Table
-      rowKey={(record: Block) => record.id}
+      rowKey={(record: Block) => uniqueId('block_')}
       pagination={{ total }}
       onChange={handleTableChange}
       loading={loading}

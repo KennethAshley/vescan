@@ -1,68 +1,101 @@
-import React, { useRef, useEffect } from 'react';
-import { Button, Card } from 'antd';
-import styled from 'styled-components';
+import axios from 'axios';
 import { Chart } from "frappe-charts/dist/frappe-charts.min.esm";
+import { format } from 'date-fns';
+import styled from 'styled-components';
 
-const data = {
-  labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  datasets: [
-    {
-      name: 'Transactions',
-      values: [18, 40, 30, 35, 8, 52, 17, 4]
-    },
-    {
-      name: 'Clauses',
-      values: [30, 22, 40, 1, 20, 100, 6, 5]
-    }
-  ]
-}
+import React, {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  Button,
+  Card,
+  Icon,
+  Statistic,
+} from 'antd';
+
+const Statistics = styled.div`
+  display: flex;
+  justify-content: center;
+
+  .ant-statistic {
+    margin: 0 20px;
+  }
+`;
 
 function Charts() {
   const chartRef = useRef(null);
+  const [transactions, setTransactions] = useState(0)
+  const [clauses, setClauses] = useState(0)
 
   useEffect(() => {
-    const chart = new Chart(chartRef.current, {
-      lineOptions: {
-        regionFill: 1
-      },
-      isNavigable: true,
-      colors: ['#1890ff', '#ffb420'],
-      type: 'line',
-      height: 400,
-      data: data,
+    let chart: any;
+
+    axios.get("http://localhost/statistics/chart").then(({ data }) => {
+      const [transactions, clauses] = data.datasets;
+
+      chart = new Chart(chartRef.current, {
+        lineOptions: {
+          regionFill: 1
+        },
+        isNavigable: true,
+        colors: ['#1890ff', '#ffb420'],
+        type: 'line',
+        height: 400,
+        data: {
+          ...data,
+          labels: data.labels.map((label: string) => {
+            return format(new Date(label), "LLL dd yyyy");
+          })
+        },
+      });
+
+      setClauses(clauses.values[clauses.values.length - 1]);
+      setTransactions(transactions.values[transactions.values.length - 1]);
     });
 
     return () => {
-      chart.destroy();
+      if (chart) {
+        chart.destroy();
+      }
     }
-  }, []);
+  }, [ transactions, clauses ]);
 
   return (
-    <Card
-      title="Network Totals"
-      style={{ marginBottom: '32px' }}
-      extra={
-        <Button.Group>
-          <Button type="link">
-            Day
-          </Button>
-          <Button type="link">
-            Week
-          </Button>
-          <Button type="link">
-            Month
-          </Button>
-          <Button type="link">
-            Quarter
-          </Button>
-          <Button type="link">
-            Year
-          </Button>
-        </Button.Group>
-      }
-    >
-      <div ref={chartRef} />
-    </Card>
+    <Fragment>
+      <Card
+        title="Network Totals"
+        style={{ marginBottom: '32px' }}
+        extra={
+          <Button.Group>
+            <Button type="link">
+              Day
+            </Button>
+            <Button type="link">
+              Week
+            </Button>
+            <Button type="link">
+              Month
+            </Button>
+            <Button type="link">
+              Quarter
+            </Button>
+            <Button type="link">
+              Year
+            </Button>
+          </Button.Group>
+        }
+      >
+        <Statistics>
+          <Statistic title="Transactions" value={transactions} prefix={<Icon type="swap" />}/>
+          <Statistic title="Clauses" value={clauses} prefix={<Icon type="gold" />}/>
+        </Statistics>
+        <div ref={chartRef} />
+      </Card>
+    </Fragment>
   );
 }
 

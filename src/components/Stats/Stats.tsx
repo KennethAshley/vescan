@@ -18,19 +18,19 @@ function Stats() {
   return (
     <StyledStats>
       <StyledCard>
-        <Statistic title="Accounts" value={103368} prefix={<Icon type="user" />} />
+        <Statistic title="Accounts" value={160456} prefix={<Icon type="user" />} />
       </StyledCard>
       <StyledCard>
-        <Statistic title="Blocks" value={2671399} prefix={<Icon type="gold" />} />
+        <Statistic title="Blocks" value={4671399} prefix={<Icon type="gold" />} />
       </StyledCard>
       <StyledCard>
-        <Statistic title="VET Value" value={0.0064} prefix={<Icon type="dollar" />} />
+        <Statistic title="VET Value" value={0.0061} prefix={<Icon type="dollar" />} />
       </StyledCard>
       <StyledCard>
-        <Statistic title="Market Cap" value={0.0064} prefix={<Icon type="stock" />} />
+        <Statistic title="Market Cap" value="$341,499,191" prefix={<Icon type="stock" />} />
       </StyledCard>
       <StyledCard>
-        <Statistic title="Trade Volume" value={10000} prefix={<Icon type="area-chart" />} />
+        <Statistic title="Trade Volume" value="$122,629,346" prefix={<Icon type="area-chart" />} />
       </StyledCard>
     </StyledStats>
   );

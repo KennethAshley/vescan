@@ -3,7 +3,8 @@ import axios from 'axios';
 import QRCode from 'qrcode.react';
 import { useParams } from "react-router-dom";
 import styled from 'styled-components';
-import { List, Typography, Modal, Button } from 'antd';
+import { List, Typography, Modal, Button, Card  } from 'antd';
+import { useLocalStorage } from 'react-use';
 
 type Account = {
   balance: number;
@@ -20,19 +21,29 @@ const QRCodeWrapper = styled.div`
 function Show() {
   const [account, setAccount] = useState<Account[]>([]);
   const [visible, setVisible] = useState(false);
-  const { address } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [savedAccounts, setSavedAccounts] = useLocalStorage<string[]>('accounts', []);
+  const [saved, setSaved] = useState(false);
+  // @ts-ignore
+  const { address } = useParams<string>();
 
   useEffect(() => {
     axios.get(`http://localhost/accounts/${address}`, {
     }).then(({ data }) => {
-
       setAccount([{
         balance: data.balance,
         code: data.code,
         energy: data.energy,
-      }])
+      }]);
+
     });
-  });
+
+    if (savedAccounts && savedAccounts.includes(address)) {
+      setSaved(true);
+    }
+
+    setLoading(false);
+  }, [ savedAccounts, address ]);
 
   function showModal() {
     setVisible(true);
@@ -42,17 +53,38 @@ function Show() {
     setVisible(false);
   }
 
+  function save() {
+    let previousAccounts = savedAccounts;
+    let addresses: Set<string> = new Set(previousAccounts)
+
+    addresses.add(address);
+
+    setSavedAccounts(oldAddresses => ([
+      ...oldAddresses,
+      ...Array.from(addresses),
+    ]));
+  }
+
   return (
-    <div>
+    <Card
+      title={
+        <Typography.Text copyable={{ text: address }}>
+          Account: { address }
+         </Typography.Text>
+      }
+      extra={
+        <Fragment>
+          <Button type="link" icon="qrcode" size="large" onClick={showModal} />
+          { saved ? (
+            <Button disabled type="link" icon="star" size="large" onClick={save} />
+          ) : (
+            <Button type="link" icon="star" size="large" onClick={save} />
+          ) }
+        </Fragment>
+      }
+    >
       <List
-        header={
-          <Typography.Title level={4} copyable={{ text: address }}>
-            Account: { address }
-            <Button type="link" icon="qrcode" size="large" onClick={showModal} />
-          </Typography.Title>
-        }
-        footer={<div>Footer</div>}
-        bordered
+        loading={loading}
         dataSource={account}
         renderItem={item => (
           <Fragment>
@@ -74,10 +106,10 @@ function Show() {
         onCancel={closeModal}
       >
         <QRCodeWrapper>
-          <QRCode size={300} value="ken" />
+          <QRCode size={300} value={address} />
         </QRCodeWrapper>
       </Modal>
-    </div>
+    </Card>
   );
 };
 

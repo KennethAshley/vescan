@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Table, Tabs } from 'antd';
+import { Table, Tabs, List as AntList } from 'antd';
+import { uniqueId } from 'lodash';
+import { useLocalStorage } from 'react-use';
 
 type Account = {
   address: string
@@ -9,7 +11,7 @@ type Account = {
 
 const { TabPane } = Tabs;
 
-const columns = [
+const accountTableColumns = [
   {
     title: 'Address',
     dataIndex: 'address',
@@ -34,6 +36,7 @@ const columns = [
 ];
 
 function List() {
+  const [savedAccounts] = useLocalStorage<String[]>('accounts');
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -53,6 +56,7 @@ function List() {
   }, [ page ]);
 
   function handleTableChange(pagination: any) {
+    setLoading(true);
     setPage(pagination.current);
   }
 
@@ -60,15 +64,25 @@ function List() {
     <Tabs defaultActiveKey="1">
       <TabPane tab="All Accounts" key="1">
         <Table
-          rowKey={(record: Account) => record.address}
+          rowKey={(record: Account) => uniqueId('account_')}
           pagination={{ total }}
           onChange={handleTableChange}
           loading={loading}
           dataSource={accounts}
-          columns={columns}
+          columns={accountTableColumns}
         />
       </TabPane>
       <TabPane tab="Favorites" key="2">
+        <AntList
+          dataSource={savedAccounts}
+          renderItem={item => (
+            <AntList.Item>
+              <Link to={`/account/${item}`}>
+                { item }
+              </Link>
+            </AntList.Item>
+          )}
+        />
       </TabPane>
       <TabPane tab="Authority" key="3">
       </TabPane>
