@@ -48,6 +48,10 @@ const QRCodeWrapper = styled.div`
   justify-content: center;
 `;
 
+const Value = styled.span`
+  margin-left: 10px;
+`;
+
 
 function Show() {
   const [transaction, setTransaction] = useState<Transaction[]>([initialTransaction]);
@@ -109,44 +113,56 @@ function Show() {
           <Fragment>
             <List.Item>
               <Typography.Text strong>Block Number:</Typography.Text>
-              <Link to={`/block/${item.meta.blockID}`}>
-                { item.meta.blockNumber }
+              <Link to={`/block/${item.meta.blockNumber}`}>
+                <Value>
+                  { item.meta.blockNumber }
+                </Value>
               </Link>
             </List.Item>
-            <List.Item>
-              <Typography.Text strong>Paid:</Typography.Text>
-              {item.paid}
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Reward:</Typography.Text>
-              {item.reward}
-            </List.Item>
+            { item.paid &&
+              <List.Item>
+                <Typography.Text strong>Paid:</Typography.Text>
+                <Value>{ parseInt(item.paid, 16) }</Value>
+              </List.Item>
+            }
+            { item.reward &&
+              <List.Item>
+                <Typography.Text strong>Reward:</Typography.Text>
+                <Value>{ parseInt(item.reward, 16) }</Value>
+              </List.Item>
+            }
             <List.Item>
               <Typography.Text strong>Gas Used:</Typography.Text>
-              {item.gas}
+              <Value>{item.gas}</Value>
             </List.Item>
             <List.Item>
-              <Typography.Text strong>Clause Count:</Typography.Text> {item.clauseCount}
+              <Typography.Text strong>Clause Count:</Typography.Text>
+              <Value>{item.clauseCount}</Value>
             </List.Item>
             <List.Item>
-              <Typography.Text strong>Timestamp:</Typography.Text> {item.dateTime}
+              <Typography.Text strong>Timestamp:</Typography.Text>
+              <Value>{item.dateTime}</Value>
             </List.Item>
             <List.Item>
               <div>
                 <Typography.Text strong>Status:</Typography.Text>
-                { item.reverted ? (
-                  <Tag color="red">Failed</Tag>
-                ) : (
-                  <Tag color="green">Success</Tag>
-                )}
+                <Value>
+                  { item.reverted ? (
+                    <Tag color="red">Failed</Tag>
+                  ) : (
+                    <Tag color="green">Success</Tag>
+                  )}
+                </Value>
               </div>
             </List.Item>
             <List.Item>
               <Typography.Text strong>Gas Payer: </Typography.Text>
               <Typography.Text copyable={{ text: item.gasPayer }}>
-                <Link to={`/account/${item.gasPayer}`}>
-                  {item.gasPayer}
-                </Link>
+                <Value>
+                  <Link to={`/account/${item.gasPayer}`}>
+                    {item.gasPayer}
+                  </Link>
+                </Value>
               </Typography.Text>
             </List.Item>
           </Fragment>

@@ -21,11 +21,11 @@ const IconText = ({ type, text }: any) => (
 );
 
 function Blocks() {
-  const [blocks, setBlocks] = useState([]);
+  const [blocks, setBlocks] = useState<Block[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost/blocks", {
+    axios.get("https://api.vexplorer.io/blocks", {
       params: {
         page: 1,
         itemsPerPage: 10
@@ -36,20 +36,29 @@ function Blocks() {
     });
   }, []);
 
-  //useEffect(() => {
-  //  const url = new URL('http://localhost:1337/.well-known/mercure');
-  //  url.searchParams.append('topic', 'block-latest');
-  //  //url.searchParams.append('topic', 'transaction-latest');
-  //  //@ts-ignore
-  //  const eventSource = new EventSource(url);
+  useEffect(() => {
+    const url = new URL('http://128.199.44.41:3000/.well-known/mercure');
+    url.searchParams.append('topic', 'block-latest');
+    //@ts-ignore
+    const eventSource = new EventSource(url);
 
-  //  eventSource.onmessage = ({ data }: MessageEvent) => {
-  //    console.log(JSON.parse(data));
-  //    //@ts-ignore
-  //    //setBlocks(oldBlocks => [JSON.parse(data), ...oldBlocks])
-  //  };
+    eventSource.onmessage = ({ data }: MessageEvent) => {
+      const newBlock: Block = JSON.parse(data);
 
-  //}, [ blocks ])
+      setBlocks(oldBlocks => {
+        oldBlocks.pop()
+
+        return [
+          newBlock,
+          ...oldBlocks,
+        ]
+      });
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   function formatTime(time: number) {
     return format(time, 'HH:mm:ss');
@@ -66,13 +75,15 @@ function Blocks() {
 						extra={<Tag color="blue">{block.totalScore} VET</Tag>}
             actions={[
 							<IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />,
-							<IconText type="number" text={`${block.transactionCount} txns`} key="transactions" />,
+							<IconText type="number" text={`${block.transactionCount} txn(s)`} key="transactions" />,
 							<IconText type="thunderbolt" text={`${block.gasUsed} Gas`} key="gas" />,
             ]}
 					>
             <List.Item.Meta
               title={
-                <Statistic title="Block" value={block.number} />
+                <Link to={`/block/${block.number}`}>
+                  <Statistic title="Block" value={block.number} />
+                </Link>
               }
             />
           </List.Item>

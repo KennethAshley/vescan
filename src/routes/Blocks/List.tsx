@@ -13,7 +13,7 @@ const columns = [
     title: 'Number',
     dataIndex: 'number',
     key: 'number',
-    render: (text: string, record: any) => <Link to={`/block/${record.id}`}>{text}</Link>,
+    render: (text: string) => <Link to={`/block/${text}`}>{text}</Link>,
   },
   {
     title: 'Age',
@@ -50,7 +50,7 @@ function Blocks() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    axios.get("http://localhost/blocks", {
+    axios.get("https://api.vexplorer.io/blocks", {
       params: {
         page,
         itemsPerPage: 10,

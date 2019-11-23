@@ -30,7 +30,7 @@ function Header() {
         <Wrapper>
           <Logo>
             <Link to="/">
-              Vescan
+              Vexplorer
             </Link>
           </Logo>
           <Menu />

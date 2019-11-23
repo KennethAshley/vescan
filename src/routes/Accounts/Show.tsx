@@ -18,6 +18,10 @@ const QRCodeWrapper = styled.div`
   justify-content: center;
 `;
 
+const Value = styled.span`
+  margin-left: 10px;
+`;
+
 function Show() {
   const [account, setAccount] = useState<Account[]>([]);
   const [visible, setVisible] = useState(false);
@@ -28,8 +32,7 @@ function Show() {
   const { address } = useParams<string>();
 
   useEffect(() => {
-    axios.get(`http://localhost/accounts/${address}`, {
-    }).then(({ data }) => {
+    axios.get(`https://api.vexplorer.io/accounts/${address}`).then(({ data }) => {
       setAccount([{
         balance: data.balance,
         code: data.code,
@@ -89,13 +92,22 @@ function Show() {
         renderItem={item => (
           <Fragment>
             <List.Item>
-              <Typography.Text mark>[BALANCE]</Typography.Text> {item.balance}
+              <Typography.Text strong>Balance:</Typography.Text>
+              <Value>
+                {item.balance}
+              </Value>
             </List.Item>
             <List.Item>
-              <Typography.Text mark>[ENERGY]</Typography.Text> {item.energy}
+              <Typography.Text strong>Energy:</Typography.Text>
+              <Value>
+                {item.energy}
+              </Value>
             </List.Item>
             <List.Item>
-              <Typography.Text mark>[CODE]</Typography.Text> {item.code}
+              <Typography.Text strong>Has Code:</Typography.Text> 
+              <Value>
+                {item.code}
+              </Value>
             </List.Item>
           </Fragment>
         )}

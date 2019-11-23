@@ -3247,6 +3247,11 @@ css-declaration-sorter@^4.0.1:
     postcss "^7.0.1"
     timsort "^0.3.0"
 
+css-doodle@^0.7.4:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/css-doodle/-/css-doodle-0.7.4.tgz#53a95752258856f8a7a31890979e0c87a67a4311"
+  integrity sha512-pIiAc/deY5kdmbEr4wD9jLZg9XAZKZi9d1CDDFl+7RbmQ1CW1a7tjPpc6vAsRw3NYUWOYZ2tg2H0X3t+kgxmfA==
+
 css-has-pseudo@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/css-has-pseudo/-/css-has-pseudo-0.10.0.tgz#3c642ab34ca242c59c41a125df9105841f6966ee"
@@ -4305,6 +4310,11 @@ ethjs-unit@0.1.6:
   dependencies:
     bn.js "4.11.6"
     number-to-bn "1.7.0"
+
+event-source-polyfill@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/event-source-polyfill/-/event-source-polyfill-1.0.9.tgz#1fe3ebf8e3faddafd4fc237424f5e5ab2706b6d0"
+  integrity sha512-+x0BMKTYwZcmGmlkHK0GsXkX1+otfEwqu3QitN0wmWuHaZniw3HeIx1k5OjWX3JUHQHlPS4yONol6eokS1ZAWg==
 
 eventemitter3@^4.0.0:
   version "4.0.0"

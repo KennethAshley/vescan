@@ -43,7 +43,7 @@ function List() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    axios.get("http://localhost/accounts", {
+    axios.get("https://api.vexplorer.io/accounts", {
       params: {
         page,
         itemsPerPage: 10,

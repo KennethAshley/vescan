@@ -31,7 +31,7 @@ const columns = [
     title: 'Block',
     dataIndex: 'block',
     key: 'block',
-    render: (text: string) => text.split('/').pop(),
+    render: (text: string) => <Link to={`/block/${text.split('/').pop()}`}>{ text.split('/').pop() }</Link>
   },
   {
     title: 'From',
@@ -53,7 +53,7 @@ function List() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    axios.get("http://localhost/transactions", {
+    axios.get("https://api.vexplorer.io/transactions", {
       params: {
         page,
         itemsPerPage: 10,

@@ -78,7 +78,7 @@ function Search() {
 
       <Alert
         style={{ marginBottom: '32px' }}
-        message="This project is in beta. Use at your own risk" type="info" closable />
+        message="💀 This project is in beta. Use at your own risk" type="info" closable />
 
       <SearchStyled>
         <Input.Search

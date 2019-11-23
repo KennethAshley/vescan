@@ -4,11 +4,16 @@ import QRCode from 'qrcode.react';
 import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { List, Tag, Typography, Modal, Button, Card } from 'antd';
+import { uniqueId } from 'lodash';
+import { Table, List, Typography, Modal, Card, Divider } from 'antd';
 
 import { createConnex } from '../../create-connex';
 
 const { connex } = createConnex('main');
+
+interface Transaction {
+  id: string;
+}
 
 interface Meta {
   blockNumber: number;
@@ -16,30 +21,51 @@ interface Meta {
 }
 
 interface Block {
-  dateTime: Date | number;
-  reverted: boolean;
-  gasPayer: string;
-  gas: number;
-  origin: string;
-  clauseCount: number;
-  meta: Meta;
-  paid: string;
-  reward: string;
+  signer: string;
+  timestamp: Date | number;
+  gasUsed: number;
 };
 
-const initialBlock = {
-  dateTime: 0,
-  paid: "",
-  reward: "",
-  gasPayer: "",
-  gas: 0,
-  origin: "",
-  clauseCount: 0,
-  reverted: false,
-  meta: {
-    blockID: "",
-    blockNumber: 0
+const columns = [
+  {
+    title: 'Id',
+    dataIndex: 'id',
+    key: 'id',
+    render: (text: string) => <Link to={`/transaction/${text}`}>{ text }</Link>
+  },
+  {
+    title: 'VET',
+    dataIndex: 'balance',
+    key: 'balance',
+  },
+  {
+    title: 'Age',
+    dataIndex: 'age',
+    key: 'age',
+  },
+  {
+    title: 'Block',
+    dataIndex: 'block',
+    key: 'block',
+    render: (text: string) => <Link to={`/block/${text.split('/').pop()}`}>{ text.split('/').pop() }</Link>
+  },
+  {
+    title: 'From',
+    dataIndex: 'origin',
+    key: 'origin',
+    render: (text: string) => <Link to={`/account/${text}`}>{ text }</Link>
+  },
+  {
+    title: 'Clauses',
+    dataIndex: 'clauseCount',
+    key: 'clauses',
   }
+];
+
+const initialBlock = {
+  timestamp: 0,
+  gasUsed: 0,
+  signer: "",
 };
 
 const QRCodeWrapper = styled.div`
@@ -48,9 +74,14 @@ const QRCodeWrapper = styled.div`
   justify-content: center;
 `;
 
+const Value = styled.span`
+  margin-left: 10px;
+`;
 
 function Show() {
   const [block, setBlock] = useState<Block[]>([initialBlock]);
+  const [total, setTotal] = useState(0);
+  const [blockTransactions, setBlockTransactions] = useState([]);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -59,16 +90,27 @@ function Show() {
 
   useEffect(() => {
     async function getBlock() {
-      const { data } = await axios.get(`http://localhost/blocks/${id}`);
-      console.log(data)
+      setLoading(true);
+      const { data } = await axios.get(`https://api.vexplorer.io/blocks/${id}`);
+
+      setBlock([{
+        gasUsed: data.gasUsed,
+        signer: data.signer,
+        timestamp: data.timestamp
+      }]);
+
+      setLoading(false);
     };
 
-    getBlock()
-  }, [ id ]);
+    async function getBlockTransactions() {
+      const { data } = await axios.get(`https://api.vexplorer.io/blocks/${id}/transactions`);
+      setBlockTransactions(data["hydra:member"]);
+      setTotal(data["hydra:totalItems"]);
+    }
 
-  function showModal() {
-    setVisible(true);
-  }
+    getBlock()
+    getBlockTransactions()
+  }, [ id ]);
 
   function closeModal() {
     setVisible(false);
@@ -76,15 +118,11 @@ function Show() {
 
   return (
     <Card
+      loading={loading}
       title={
-        <Typography.Text copyable={{ text: id }}>
-          Transaction: { id }
+        <Typography.Text>
+          Block: { id }
          </Typography.Text>
-      }
-      extra={
-        <Fragment>
-          <Button type="link" icon="qrcode" size="large" onClick={showModal} />
-        </Fragment>
       }
     >
       <List
@@ -92,49 +130,35 @@ function Show() {
         renderItem={item => (
           <Fragment>
             <List.Item>
-              <Typography.Text strong>Block Number:</Typography.Text>
-              <Link to={`/block/${item.meta.blockID}`}>
-                { item.meta.blockNumber }
-              </Link>
+              <Typography.Text strong>Timesamp:</Typography.Text>
+              <Value>
+                {item.timestamp}
+              </Value>
             </List.Item>
             <List.Item>
-              <Typography.Text strong>Paid:</Typography.Text>
-              {item.paid}
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Reward:</Typography.Text>
-              {item.reward}
+              <Typography.Text strong>Signer:</Typography.Text>
+              <Value>
+                <Link to={`/account/${item.signer}`}>
+                  {item.signer}
+                </Link>
+              </Value>
             </List.Item>
             <List.Item>
               <Typography.Text strong>Gas Used:</Typography.Text>
-              {item.gas}
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Clause Count:</Typography.Text> {item.clauseCount}
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Timestamp:</Typography.Text> {item.dateTime}
-            </List.Item>
-            <List.Item>
-              <div>
-                <Typography.Text strong>Status:</Typography.Text>
-                { item.reverted ? (
-                  <Tag color="red">Failed</Tag>
-                ) : (
-                  <Tag color="green">Success</Tag>
-                )}
-              </div>
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Gas Payer: </Typography.Text>
-              <Typography.Text copyable={{ text: item.gasPayer }}>
-                <Link to={`/account/${item.gasPayer}`}>
-                  {item.gasPayer}
-                </Link>
-              </Typography.Text>
+              <Value>
+                {item.gasUsed}
+              </Value>
             </List.Item>
           </Fragment>
         )}
+      />
+      <Divider orientation="left">Transactions</Divider>
+      <Table
+        rowKey={(record: Transaction) => uniqueId('transaction_')}
+        pagination={{ total }}
+        loading={loading}
+        dataSource={blockTransactions}
+        columns={columns}
       />
       <Modal
         visible={visible}

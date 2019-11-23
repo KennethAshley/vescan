@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'event-source-polyfill';
 import {
   BrowserRouter as Router,
   Switch,
@@ -25,6 +26,7 @@ import {
 } from './routes/Blocks';
 
 import Layout from './components/Layout';
+import Search from './components/Search';
 
 import 'antd/dist/antd.css';
 import './index.css';
@@ -47,6 +49,7 @@ const GlobalStyle = createGlobalStyle`
 ReactDOM.render(
   <Router>
     <Layout>
+      <Search />
       <Switch>
         <Route path="/transaction/:id">
           <Transaction />

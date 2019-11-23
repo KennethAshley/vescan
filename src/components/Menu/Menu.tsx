@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Menu as AntMenu, Icon } from 'antd';
+import styled from 'styled-components';
 
-import MenuStyled from './Menu.styled';
+const MenuStyled = styled.div`
+  flex: 1;
+`;
 
 function Menu() {
   return (
@@ -34,13 +37,6 @@ function Menu() {
           <Link to="/accounts">
             <Icon type="user" />
             Accounts
-          </Link>
-        </AntMenu.Item>
-
-        <AntMenu.Item key="setting">
-          <Link to="/">
-            <Icon type="setting" />
-            Testnet
           </Link>
         </AntMenu.Item>
 

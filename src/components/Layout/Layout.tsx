@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
+import Footer from '../Footer';
 import Header from '../Header';
 
 type LayoutProps = {
@@ -15,9 +16,11 @@ function Layout({ children }: LayoutProps) {
   return (
     <LayoutStyled>
       <Header />
+
       <div className="container">
         { children }
       </div>
+      <Footer />
     </LayoutStyled>
   );
 }
