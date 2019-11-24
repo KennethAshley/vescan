@@ -34,7 +34,7 @@ function Charts() {
   useEffect(() => {
     let chart: any;
 
-    axios.get("http://localhost/statistics/chart").then(({ data }) => {
+    axios.get("https://api.vexplorer.io/statistics/chart").then(({ data }) => {
       const [transactions, clauses] = data.datasets;
 
       chart = new Chart(chartRef.current, {
