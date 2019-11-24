@@ -37,7 +37,7 @@ function Blocks() {
   }, []);
 
   useEffect(() => {
-    const url = new URL('http://128.199.44.41:3000/.well-known/mercure');
+    const url = new URL('https://api.vexplorer.io:3000/.well-known/mercure');
     url.searchParams.append('topic', 'block-latest');
     //@ts-ignore
     const eventSource = new EventSource(url);
