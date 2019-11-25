@@ -12,10 +12,10 @@ const Home: React.FC = () => {
       <Chart />
       <Stats />
       <Row gutter={16}>
-        <Col span={12}>
+        <Col sm={24} md={24} lg={12}>
           <Blocks />
         </Col>
-        <Col span={12}>
+        <Col sm={24} md={24} lg={12}>
           <Transactions />
         </Col>
       </Row>

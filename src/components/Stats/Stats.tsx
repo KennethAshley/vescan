@@ -7,6 +7,14 @@ const StyledStats = styled.div`
   padding-bottom: 32px;
   margin-right: -6px;
   margin-left: -6px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .ant-card {
+      margin-bottom: 32px !important;
+    }
+  }
 `;
 
 const StyledCard = styled(Card)`

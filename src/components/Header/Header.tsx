@@ -17,6 +17,10 @@ const Logo = styled.h1`
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const HeaderStyled = styled.div`

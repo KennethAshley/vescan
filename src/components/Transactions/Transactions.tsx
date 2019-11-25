@@ -87,7 +87,7 @@ function Transactions() {
                 title={
                   <Text copyable={{ text: transaction.id }}>
                     <Link to={`/transaction/${transaction.id}`}>
-                      { truncate(transaction.id, { 'length': 60 }) }
+                      { truncate(transaction.id, { 'length': 50 }) }
                     </Link>
                   </Text>
                 }
