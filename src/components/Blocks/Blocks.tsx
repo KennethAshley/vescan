@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns'
-import { List, Tag, Card, Icon, Statistic } from 'antd';
+import { List, Tag, Card, Icon, Statistic, Skeleton } from 'antd';
 
 type Block = {
+  loading: boolean;
   number: number 
   gasUsed: number
   txsFeatures: number
@@ -22,6 +23,7 @@ const IconText = ({ type, text }: any) => (
 
 function Blocks() {
   const [blocks, setBlocks] = useState<Block[]>([]);
+  const [itemLoading, setItemLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -43,7 +45,9 @@ function Blocks() {
     const eventSource = new EventSource(url);
 
     eventSource.onmessage = ({ data }: MessageEvent) => {
-      const newBlock: Block = JSON.parse(data);
+      setItemLoading(true);
+      let newBlock: Block = JSON.parse(data);
+      newBlock = { loading: true, ...newBlock };
 
       setBlocks(oldBlocks => {
         oldBlocks.pop()
@@ -53,6 +57,10 @@ function Blocks() {
           ...oldBlocks,
         ]
       });
+
+      setTimeout(() => {
+        setItemLoading(false);
+      }, 500);
     };
 
     return () => {
@@ -70,23 +78,25 @@ function Blocks() {
         loading={loading}
         itemLayout="vertical"
         dataSource={blocks}
-        renderItem={(block: Block) => (
-          <List.Item 
-						extra={<Tag color="blue">{block.totalScore} VET</Tag>}
-            actions={[
-							<IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />,
-							<IconText type="number" text={`${block.transactionCount} txn(s)`} key="transactions" />,
-							<IconText type="thunderbolt" text={`${block.gasUsed} Gas`} key="gas" />,
-            ]}
-					>
-            <List.Item.Meta
-              title={
-                <Link to={`/block/${block.number}`}>
-                  <Statistic title="Block" value={block.number} />
-                </Link>
-              }
-            />
-          </List.Item>
+        renderItem={(block: Block, index) => (
+          <Skeleton loading={index === 0 && itemLoading} active>
+            <List.Item 
+              extra={<Tag color="blue">{block.totalScore} VET</Tag>}
+              actions={[
+                <IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />,
+                <IconText type="number" text={`${block.transactionCount} txn(s)`} key="transactions" />,
+                <IconText type="thunderbolt" text={`${block.gasUsed} Gas`} key="gas" />,
+              ]}
+            >
+                <List.Item.Meta
+                  title={
+                    <Link to={`/block/${block.number}`}>
+                      <Statistic title="Block" value={block.number} />
+                    </Link>
+                  }
+                />
+            </List.Item>
+          </Skeleton>
         )}
       />
     </Card>

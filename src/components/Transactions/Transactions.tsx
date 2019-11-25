@@ -3,7 +3,7 @@ import axios from 'axios';
 import { truncate } from 'lodash';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { List, Tag, Card, Icon, Typography } from 'antd';
+import { List, Card, Icon, Typography, Skeleton } from 'antd';
 
 type Transaction = {
    id: string;
@@ -22,6 +22,7 @@ const IconText = ({ type, text }: any) => (
 
 function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [itemLoading, setItemLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ function Transactions() {
     const eventSource = new EventSource(url);
 
     eventSource.onmessage = ({ data }: MessageEvent) => {
+      setItemLoading(true);
       const newTransaction: Transaction = JSON.parse(data);
 
       setTransactions(oldTransactions => {
@@ -54,6 +56,10 @@ function Transactions() {
           ...oldTransactions,
         ]
       });
+
+      setTimeout(() => {
+        setItemLoading(false);
+      }, 500);
     };
 
     return () => {
@@ -68,24 +74,26 @@ function Transactions() {
         loading={loading}
         itemLayout="vertical"
         dataSource={transactions}
-        renderItem={(transaction: Transaction) => (
-          <List.Item 
-            //extra={<Tag color="blue">20,1239 VET</Tag>}
-            actions={[
-							<IconText type="clock-circle" text={format(new Date(transaction.dateTime), "HH:mm:ss")} key="time" />,
-							<IconText type="number" text={`${transaction.clauseCount} clause(s)`} key="clauses" />
-            ]}
-					>
-            <List.Item.Meta
-              title={
-                <Text copyable={{ text: transaction.id }}>
-                  <Link to={`/transaction/${transaction.id}`}>
-                    { truncate(transaction.id, { 'length': 60 }) }
-                  </Link>
-                </Text>
-              }
-            />
-          </List.Item>
+        renderItem={(transaction: Transaction, index) => (
+          <Skeleton loading={index === 0 && itemLoading} active>
+            <List.Item 
+              //extra={<Tag color="blue">20,1239 VET</Tag>}
+              actions={[
+                <IconText type="clock-circle" text={format(new Date(transaction.dateTime), "HH:mm:ss")} key="time" />,
+                <IconText type="number" text={`${transaction.clauseCount} clause(s)`} key="clauses" />
+              ]}
+            >
+              <List.Item.Meta
+                title={
+                  <Text copyable={{ text: transaction.id }}>
+                    <Link to={`/transaction/${transaction.id}`}>
+                      { truncate(transaction.id, { 'length': 60 }) }
+                    </Link>
+                  </Text>
+                }
+              />
+            </List.Item>
+          </Skeleton>
         )}
       />
     </Card>
