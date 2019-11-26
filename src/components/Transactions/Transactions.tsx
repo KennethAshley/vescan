@@ -3,15 +3,13 @@ import axios from 'axios';
 import { truncate } from 'lodash';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { List, Card, Icon, Typography, Skeleton } from 'antd';
+import { List, Card, Icon, Skeleton, Typography } from 'antd';
 
 type Transaction = {
    id: string;
    dateTime: Date;
    clauseCount: number;
 };
-
-const { Text } = Typography;
 
 const IconText = ({ type, text }: any) => (
 	<span>
@@ -89,11 +87,11 @@ function Transactions() {
             >
               <List.Item.Meta
                 title={
-                  <Text copyable={{ text: transaction.id }}>
+                  <Typography.Text copyable={{ text: transaction.id }}>
                     <Link to={`/transaction/${transaction.id}`}>
                       { truncate(transaction.id, { 'length': 50 }) }
                     </Link>
-                  </Text>
+                  </Typography.Text>
                 }
               />
             </List.Item>

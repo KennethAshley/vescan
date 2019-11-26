@@ -16,8 +16,8 @@ function VTHOTransferred({ chart: data }: any) {
         regionFill: 1
       },
       isNavigable: true,
-      colors: ['#1890ff', '#ffb420'],
-      type: 'bar',
+      colors: ['#d3d3d3'],
+      type: 'line',
       height: 200,
       data,
     });

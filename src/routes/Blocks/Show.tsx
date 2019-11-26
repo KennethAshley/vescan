@@ -5,8 +5,10 @@ import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { uniqueId } from 'lodash';
-import { Table, List, Typography, Card, Divider, Progress } from 'antd';
+import { Table, List, Typography, Card, Divider } from 'antd';
 import { Helmet } from 'react-helmet';
+
+import Address from '../../components/Address';
 
 interface Transaction {
   id: string;
@@ -136,9 +138,7 @@ function Show() {
               <List.Item>
                 <Typography.Text strong>Signer:</Typography.Text>
                 <Value>
-                  <Typography.Text copyable={{ text: item.signer }}>
-                    <Link to={`/account/${item.signer}`}>{ item.signer }</Link>
-                 </Typography.Text>
+                  <Address address={item.signer} />
                 </Value>
               </List.Item>
               <List.Item>

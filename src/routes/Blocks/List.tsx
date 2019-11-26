@@ -6,6 +6,8 @@ import { Table, Progress, Typography } from 'antd';
 import { uniqueId } from 'lodash';
 import { Helmet } from 'react-helmet';
 
+import Address from '../../components/Address';
+
 type Block = {
   id: string
 };
@@ -54,11 +56,7 @@ const columns = [
     title: 'Signer',
     dataIndex: 'signer',
     key: 'signer',
-    render: (text: string) => (
-      <Typography.Text copyable={{ text }}>
-        <Link to={`/account/${text}`}>{ text }</Link>
-     </Typography.Text>
-    )
+    render: (text: string) => <Address address={text} />
   },
 ];
 

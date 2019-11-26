@@ -6,6 +6,9 @@ import { uniqueId } from 'lodash';
 import { useLocalStorage } from 'react-use';
 import { Helmet } from 'react-helmet';
 
+import Address from '../../components/Address';
+import Balance from '../../components/Balance';
+
 type Account = {
   address: string
 };
@@ -17,17 +20,19 @@ const accountTableColumns = [
     title: 'Address',
     dataIndex: 'address',
     key: 'address',
-    render: (text: string) => <Link to={`/account/${text}`}>{ text }</Link>
+    render: (text: string) => <Address address={text} />
   },
   {
     title: 'VET',
     dataIndex: 'balance',
     key: 'balance',
+    render: (text: number) => <Balance balance={text} />
   },
   {
     title: 'VTHO',
     dataIndex: 'energy',
     key: 'energy',
+    render: (text: number) => <Balance balance={text} />
   },
   {
     title: 'Has Code',

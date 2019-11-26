@@ -1,0 +1,60 @@
+{
+  "addresses": [
+    {
+      "label": "Binance 1",
+      "address": "0xa4adafaef9ec07bc4dc6de146934c7119341ee25"
+    },
+    {
+      "label": "Binance 2",
+      "address": "0xd0d9cd5aa98efcaeee2e065ddb8538fa977bc8eb"
+    },
+    {
+      "label": "Binance 3",
+      "address": "0x1263c741069eda8056534661256079d485e111eb"
+    },
+    {
+      "label": "OceanEx 2",
+      "address": "0x48728dcafa1afaeb79c6d7249b6b4a3868ce5c12"
+    },
+    {
+      "label": "OceanEx 3",
+      "address": "0x64594d4e1c9296c15384441fc1640d9812b51ffd"
+    },
+    {
+      "label": "Foundation 4",
+      "address": "0x0bd7b06debd1522e75e4b91ff598f107fd826c8a"
+    },
+    {
+      "label": "Huobi",
+      "address": "0xd7dd13a54755cb68859eec0cac24144aafb8c881"
+    },
+    {
+      "label": "Foundation Buyback",
+      "address": "0xcbb08415335623a838e27d22ac7fdf8a370af064"
+    },
+    {
+      "label": "Gate.io",
+      "address": "0x1c4b70a3968436b9a0a9cf5205c787eb81bb558c"
+    },
+    {
+      "label": "Bittrex",
+      "address": "0xb73554767983dc5aaeac2b948e407f57e8e9dea1"
+    },
+    {
+      "label": "Bitfinex",
+      "address": "0xe401984ab34bae9f6c9128e50b57e7988ba815c7"
+    },
+    {
+      "label": "Bitvavo",
+      "address": "0xe13322e57366a4dff3a3a32b33355ff2bd2c4dbd"
+    },
+    {
+      "label": "Vexchange",
+      "address": "0xf9f99f982f3ea9020f0a0afd4d4679dfee1b63cf"
+    },
+    {
+      "label": "LBank",
+      "address": "0xfa02e5f286f635df9378395f4be54647e73a66a0"
+    }
+  ]
+}

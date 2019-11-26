@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { format, fromUnixTime } from 'date-fns'
 import { List, Tag, Card, Icon, Statistic, Skeleton } from 'antd';
 
+import Balance from '../Balance';
+
 type Block = {
   loading: boolean;
   number: number 
@@ -82,7 +84,11 @@ function Blocks() {
         renderItem={(block: Block, index) => (
           <Skeleton loading={index === 0 && itemLoading} active>
             <List.Item 
-              extra={<Tag color="blue">{block.totalScore} VET</Tag>}
+              extra={
+                <Tag color="blue">
+                  <Balance balance={block.totalScore} suffix="VET" />
+                </Tag>
+              }
               actions={[
                 <IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />,
                 <IconText type="number" text={`${block.transactionCount} txn(s)`} key="transactions" />,

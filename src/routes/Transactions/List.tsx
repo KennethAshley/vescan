@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import { truncate } from 'lodash';
 import { format } from 'date-fns'
 import { uniqueId } from 'lodash';
-import { Table, Tabs, Typography } from 'antd';
+import { Table, Tabs } from 'antd';
 import { Helmet } from 'react-helmet';
+
+import Address from '../../components/Address';
 
 type Transaction = {
   id: string
@@ -51,11 +53,7 @@ const columns = [
     title: 'From',
     dataIndex: 'origin',
     key: 'origin',
-    render: (text: string) => (
-      <Typography.Text copyable={{ text }}>
-        <Link to={`/account/${text}`}>{ text }</Link>
-     </Typography.Text>
-    )
+    render: (text: string) => <Address address={text} />
   },
   {
     title: 'Clauses',

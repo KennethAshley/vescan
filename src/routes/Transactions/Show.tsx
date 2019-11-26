@@ -2,12 +2,15 @@ import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import QRCode from 'qrcode.react';
 import { useParams } from "react-router-dom";
+import { fromUnixTime, format } from 'date-fns'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { List, Tag, Typography, Modal, Button, Card } from 'antd';
 import { Helmet } from 'react-helmet';
+import { ethers } from 'ethers';
 
 import { createConnex } from '../../create-connex';
+import Address from '../../components/Address';
 
 const { connex } = createConnex('main');
 
@@ -54,18 +57,27 @@ const Value = styled.span`
 `;
 
 
+function formatWei(hex: string) {
+  const wei = ethers.utils.bigNumberify(hex);
+  return ethers.utils.formatEther(wei);
+}
+
+function formatTime(time: any) {
+  return format(new Date(time), 'LLL dd yyyy HH:mm:ss');
+}
+
 function Show() {
   const [transaction, setTransaction] = useState<Transaction[]>([initialTransaction]);
-  const [receipt, setReceipt] = useState();
+  //const [receipt, setReceipt] = useState();
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
 
   // @ts-ignore
   const { id } = useParams<string>();
 
   useEffect(() => {
     async function getTransactionData() {
-      const { data } = await axios.get(`http://localhost/transactions/${id}`);
+      const { data } = await axios.get(`https://api.vexplorer.io/transactions/${id}`);
       return data;
     };
 
@@ -83,7 +95,7 @@ function Show() {
       setTransaction([{
         ...data,
         ...receipt,
-      }])
+      }]);
     })
   }, [ id ]);
 
@@ -127,13 +139,17 @@ function Show() {
               { item.paid &&
                 <List.Item>
                   <Typography.Text strong>Paid:</Typography.Text>
-                  <Value>{ parseInt(item.paid, 16) }</Value>
+                  <Value>
+                    { formatWei(item.paid) }
+                  </Value>
                 </List.Item>
               }
               { item.reward &&
                 <List.Item>
                   <Typography.Text strong>Reward:</Typography.Text>
-                  <Value>{ parseInt(item.reward, 16) }</Value>
+                  <Value>
+                    { formatWei(item.reward) }
+                  </Value>
                 </List.Item>
               }
               <List.Item>
@@ -146,7 +162,9 @@ function Show() {
               </List.Item>
               <List.Item>
                 <Typography.Text strong>Timestamp:</Typography.Text>
-                <Value>{item.dateTime}</Value>
+                <Value>
+                  {formatTime(item.dateTime)}
+                </Value>
               </List.Item>
               <List.Item>
                 <div>
@@ -162,13 +180,9 @@ function Show() {
               </List.Item>
               <List.Item>
                 <Typography.Text strong>Gas Payer: </Typography.Text>
-                <Typography.Text copyable={{ text: item.gasPayer }}>
-                  <Value>
-                    <Link to={`/account/${item.gasPayer}`}>
-                      {item.gasPayer}
-                    </Link>
-                  </Value>
-                </Typography.Text>
+                <Value>
+                  <Address address={item.gasPayer} />
+                </Value>
               </List.Item>
             </Fragment>
           )}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useContext } from 'react';
 import axios from 'axios';
 import QRCode from 'qrcode.react';
 import { useParams } from "react-router-dom";
@@ -6,6 +6,10 @@ import styled from 'styled-components';
 import { List, Typography, Modal, Button, Card  } from 'antd';
 import { useLocalStorage } from 'react-use';
 import { Helmet } from 'react-helmet';
+
+import { PriceContext } from '../../contexts/Price';
+import Address from '../../components/Address';
+import Balance from '../../components/Balance';
 
 type Account = {
   balance: number;
@@ -29,6 +33,7 @@ function Show() {
   const [loading, setLoading] = useState(true);
   const [savedAccounts, setSavedAccounts] = useLocalStorage<string[]>('accounts', []);
   const [saved, setSaved] = useState(false);
+  const price = useContext<any>(PriceContext);
   // @ts-ignore
   const { address } = useParams<string>();
 
@@ -76,9 +81,7 @@ function Show() {
       </Helmet>
       <Card
         title={
-          <Typography.Text copyable={{ text: address }}>
-            Account: { address }
-           </Typography.Text>
+          <Address link address={address} prefix="Account" />
         }
         extra={
           <Fragment>
@@ -99,19 +102,19 @@ function Show() {
               <List.Item>
                 <Typography.Text strong>Balance:</Typography.Text>
                 <Value>
-                  {item.balance}
+                  <Balance balance={item.balance} price={price.vechain.usd} />
                 </Value>
               </List.Item>
               <List.Item>
                 <Typography.Text strong>Energy:</Typography.Text>
                 <Value>
-                  {item.energy}
+                  <Balance balance={item.energy} price={price['vethor-token'].usd}/>
                 </Value>
               </List.Item>
               <List.Item>
                 <Typography.Text strong>Has Code:</Typography.Text> 
                 <Value>
-                  {item.code}
+                  {item.code ? 'True' : 'False'}
                 </Value>
               </List.Item>
             </Fragment>
