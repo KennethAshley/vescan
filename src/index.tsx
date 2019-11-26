@@ -10,6 +10,7 @@ import { createGlobalStyle } from 'styled-components';
 import WebFont from 'webfontloader';
 
 import Home from './routes/Home';
+import Trade from './routes/Trade';
 import {
   List as Accounts,
   Show as Account,
@@ -51,6 +52,9 @@ ReactDOM.render(
     <Layout>
       <Search />
       <Switch>
+        <Route path="/trade">
+          <Trade />
+        </Route>
         <Route path="/transaction/:id">
           <Transaction />
         </Route>
