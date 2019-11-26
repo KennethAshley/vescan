@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Chart } from "frappe-charts/dist/frappe-charts.min.esm";
 import { format } from 'date-fns';
 import styled from 'styled-components';
+import { isEmpty } from 'lodash';
 
 import React, {
   Fragment,
@@ -13,9 +14,15 @@ import React, {
 import {
   Button,
   Card,
+  Col,
   Icon,
+  Row,
   Statistic,
 } from 'antd';
+
+import VTHOBurned from './VTHOBurned';
+import VETTransferred from './VETTransferred';
+import VTHOTransferred from './VTHOTransferred';
 
 const Statistics = styled.div`
   display: flex;
@@ -26,16 +33,29 @@ const Statistics = styled.div`
   }
 `;
 
+const ExtraCharts = styled.div`
+  margin-bottom: 32px;
+`;
+
+function formatTime(time: number | string) {
+  return format(new Date(time), "LLL dd yyyy");
+}
+
 function Charts() {
+  const [transactions, setTransactions] = useState(0);
+  const [clauses, setClauses] = useState(0);
+  const [vthoBurned, setVthoBurned] = useState({});
+
   const chartRef = useRef(null);
-  const [transactions, setTransactions] = useState(0)
-  const [clauses, setClauses] = useState(0)
 
   useEffect(() => {
     let chart: any;
 
     axios.get("https://api.vexplorer.io/statistics/chart").then(({ data }) => {
-      const [transactions, clauses] = data.datasets;
+      const [transactions, clauses, vthoBurned] = data.datasets;
+      const formattedLabels = data.labels.map((label: string) => {
+        return formatTime(label);
+      });
 
       chart = new Chart(chartRef.current, {
         lineOptions: {
@@ -46,11 +66,17 @@ function Charts() {
         type: 'line',
         height: 400,
         data: {
-          ...data,
-          labels: data.labels.map((label: string) => {
-            return format(new Date(label), "LLL dd yyyy");
-          })
-        },
+          labels: formattedLabels,
+          datasets: [
+            transactions,
+            clauses
+          ],
+        }
+      });
+
+      setVthoBurned({
+        datasets: [vthoBurned],
+        labels: formattedLabels
       });
 
       setClauses(clauses.values[clauses.values.length - 1]);
@@ -95,6 +121,27 @@ function Charts() {
         </Statistics>
         <div ref={chartRef} />
       </Card>
+
+      <ExtraCharts>
+        <Row gutter={12}>
+          <Col span={8}>
+            { !isEmpty(vthoBurned) &&
+              <VETTransferred chart={vthoBurned} />
+            }
+          </Col>
+          <Col span={8}>
+            { !isEmpty(vthoBurned) &&
+              <VTHOTransferred chart={vthoBurned} />
+            }
+          </Col>
+          <Col span={8}>
+            { !isEmpty(vthoBurned) &&
+              <VTHOBurned chart={vthoBurned} />
+            }
+          </Col>
+        </Row>
+      </ExtraCharts>
+
     </Fragment>
   );
 }

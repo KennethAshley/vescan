@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns'
+import { format, fromUnixTime } from 'date-fns'
 import { List, Tag, Card, Icon, Statistic, Skeleton } from 'antd';
 
 type Block = {
@@ -69,7 +69,8 @@ function Blocks() {
   }, []);
 
   function formatTime(time: number) {
-    return format(time, 'HH:mm:ss');
+    const date = fromUnixTime(time);
+    return format(date, 'HH:mm:ss');
   }
 
   return (
