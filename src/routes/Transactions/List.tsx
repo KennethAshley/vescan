@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { truncate } from 'lodash';
+import { format } from 'date-fns'
 import { uniqueId } from 'lodash';
-import { Table, Tabs } from 'antd';
+import { Table, Tabs, Typography } from 'antd';
+import { Helmet } from 'react-helmet';
 
 type Transaction = {
   id: string
@@ -15,29 +18,44 @@ const columns = [
     title: 'Id',
     dataIndex: 'id',
     key: 'id',
-    render: (text: string) => <Link to={`/transaction/${text}`}>{ text }</Link>
+    render: (text: string) => {
+      return (
+        <Link to={`/transaction/${text}`}>
+          { truncate(text, { 'length': 50 }) }
+        </Link>
+      );
+    }
   },
-  {
-    title: 'VET',
-    dataIndex: 'balance',
-    key: 'balance',
-  },
+  //{
+  //  title: 'VET',
+  //  dataIndex: 'balance',
+  //  key: 'balance',
+  //},
   {
     title: 'Age',
-    dataIndex: 'age',
+    dataIndex: 'dateTime',
     key: 'age',
+    render: (text: number) => formatTime(text)
   },
   {
     title: 'Block',
-    dataIndex: 'block',
+    dataIndex: 'blockRef',
     key: 'block',
-    render: (text: string) => <Link to={`/block/${text.split('/').pop()}`}>{ text.split('/').pop() }</Link>
+    render: (text: string) => {
+      const block = parseInt(text, 16);
+
+      return <Link to={`/block/${block}`}>{ block }</Link>
+    }
   },
   {
     title: 'From',
     dataIndex: 'origin',
     key: 'origin',
-    render: (text: string) => <Link to={`/account/${text}`}>{ text }</Link>
+    render: (text: string) => (
+      <Typography.Text copyable={{ text }}>
+        <Link to={`/account/${text}`}>{ text }</Link>
+     </Typography.Text>
+    )
   },
   {
     title: 'Clauses',
@@ -45,6 +63,10 @@ const columns = [
     key: 'clauses',
   }
 ];
+
+function formatTime(time: number) {
+  return format(new Date(time), 'LLL dd yyyy HH:mm:ss');
+}
 
 function List() {
   const [transactions, setTransactions] = useState([]);
@@ -70,20 +92,25 @@ function List() {
   }
 
   return (
-    <Tabs defaultActiveKey="1">
-      <TabPane tab="Transactions" key="1">
-        <Table
-          rowKey={(record: Transaction) => uniqueId('transaction_')}
-          pagination={{ total }}
-          onChange={handleTableChange}
-          loading={loading}
-          dataSource={transactions}
-          columns={columns}
-        />
-      </TabPane>
-      <TabPane tab="Token Transfers" key="2">
-      </TabPane>
-    </Tabs>
+    <Fragment>
+      <Helmet>
+        <title>Vexplorer | Transactions</title>
+      </Helmet>
+      <Tabs defaultActiveKey="1">
+        <TabPane tab="Transactions" key="1">
+          <Table
+            rowKey={(record: Transaction) => uniqueId('transaction_')}
+            pagination={{ total }}
+            onChange={handleTableChange}
+            loading={loading}
+            dataSource={transactions}
+            columns={columns}
+          />
+        </TabPane>
+        <TabPane tab="Token Transfers" key="2">
+        </TabPane>
+      </Tabs>
+    </Fragment>
   );
 }
 

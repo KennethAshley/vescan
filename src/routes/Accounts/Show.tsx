@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 import { List, Typography, Modal, Button, Card  } from 'antd';
 import { useLocalStorage } from 'react-use';
+import { Helmet } from 'react-helmet';
 
 type Account = {
   balance: number;
@@ -69,59 +70,64 @@ function Show() {
   }
 
   return (
-    <Card
-      title={
-        <Typography.Text copyable={{ text: address }}>
-          Account: { address }
-         </Typography.Text>
-      }
-      extra={
-        <Fragment>
-          <Button type="link" icon="qrcode" size="large" onClick={showModal} />
-          { saved ? (
-            <Button disabled type="link" icon="star" size="large" onClick={save} />
-          ) : (
-            <Button type="link" icon="star" size="large" onClick={save} />
-          ) }
-        </Fragment>
-      }
-    >
-      <List
-        loading={loading}
-        dataSource={account}
-        renderItem={item => (
+    <Fragment>
+      <Helmet>
+        <title>Vexplorer | Account</title>
+      </Helmet>
+      <Card
+        title={
+          <Typography.Text copyable={{ text: address }}>
+            Account: { address }
+           </Typography.Text>
+        }
+        extra={
           <Fragment>
-            <List.Item>
-              <Typography.Text strong>Balance:</Typography.Text>
-              <Value>
-                {item.balance}
-              </Value>
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Energy:</Typography.Text>
-              <Value>
-                {item.energy}
-              </Value>
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Has Code:</Typography.Text> 
-              <Value>
-                {item.code}
-              </Value>
-            </List.Item>
+            <Button type="link" icon="qrcode" size="large" onClick={showModal} />
+            { saved ? (
+              <Button disabled type="link" icon="star" size="large" onClick={save} />
+            ) : (
+              <Button type="link" icon="star" size="large" onClick={save} />
+            ) }
           </Fragment>
-        )}
-      />
-      <Modal
-        visible={visible}
-        onOk={closeModal}
-        onCancel={closeModal}
+        }
       >
-        <QRCodeWrapper>
-          <QRCode size={300} value={address} />
-        </QRCodeWrapper>
-      </Modal>
-    </Card>
+        <List
+          loading={loading}
+          dataSource={account}
+          renderItem={item => (
+            <Fragment>
+              <List.Item>
+                <Typography.Text strong>Balance:</Typography.Text>
+                <Value>
+                  {item.balance}
+                </Value>
+              </List.Item>
+              <List.Item>
+                <Typography.Text strong>Energy:</Typography.Text>
+                <Value>
+                  {item.energy}
+                </Value>
+              </List.Item>
+              <List.Item>
+                <Typography.Text strong>Has Code:</Typography.Text> 
+                <Value>
+                  {item.code}
+                </Value>
+              </List.Item>
+            </Fragment>
+          )}
+        />
+        <Modal
+          visible={visible}
+          onOk={closeModal}
+          onCancel={closeModal}
+        >
+          <QRCodeWrapper>
+            <QRCode size={300} value={address} />
+          </QRCodeWrapper>
+        </Modal>
+      </Card>
+    </Fragment>
   );
 };
 

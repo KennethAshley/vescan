@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Tabs, List as AntList } from 'antd';
 import { uniqueId } from 'lodash';
 import { useLocalStorage } from 'react-use';
+import { Helmet } from 'react-helmet';
 
 type Account = {
   address: string
@@ -32,6 +33,7 @@ const accountTableColumns = [
     title: 'Has Code',
     dataIndex: 'code',
     key: 'code',
+    render: (text: string) => text ? 'True' : 'False',
   },
 ];
 
@@ -61,32 +63,37 @@ function List() {
   }
 
   return (
-    <Tabs defaultActiveKey="1">
-      <TabPane tab="All Accounts" key="1">
-        <Table
-          rowKey={(record: Account) => uniqueId('account_')}
-          pagination={{ total }}
-          onChange={handleTableChange}
-          loading={loading}
-          dataSource={accounts}
-          columns={accountTableColumns}
-        />
-      </TabPane>
-      <TabPane tab="Favorites" key="2">
-        <AntList
-          dataSource={savedAccounts}
-          renderItem={item => (
-            <AntList.Item>
-              <Link to={`/account/${item}`}>
-                { item }
-              </Link>
-            </AntList.Item>
-          )}
-        />
-      </TabPane>
-      <TabPane tab="Authority" key="3">
-      </TabPane>
-    </Tabs>
+    <Fragment>
+      <Helmet>
+        <title>Vexplorer | Accounts</title>
+      </Helmet>
+      <Tabs defaultActiveKey="1">
+        <TabPane tab="All Accounts" key="1">
+          <Table
+            rowKey={(record: Account) => uniqueId('account_')}
+            pagination={{ total }}
+            onChange={handleTableChange}
+            loading={loading}
+            dataSource={accounts}
+            columns={accountTableColumns}
+          />
+        </TabPane>
+        <TabPane tab="Favorites" key="2">
+          <AntList
+            dataSource={savedAccounts}
+            renderItem={item => (
+              <AntList.Item>
+                <Link to={`/account/${item}`}>
+                  { item }
+                </Link>
+              </AntList.Item>
+            )}
+          />
+        </TabPane>
+        <TabPane tab="Authority" key="3">
+        </TabPane>
+      </Tabs>
+    </Fragment>
   );
 }
 

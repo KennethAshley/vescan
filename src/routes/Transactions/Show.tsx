@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { List, Tag, Typography, Modal, Button, Card } from 'antd';
+import { Helmet } from 'react-helmet';
 
 import { createConnex } from '../../create-connex';
 
@@ -95,89 +96,94 @@ function Show() {
   }
 
   return (
-    <Card
-      title={
-        <Typography.Text copyable={{ text: id }}>
-          Transaction: { id }
-         </Typography.Text>
-      }
-      extra={
-        <Fragment>
-          <Button type="link" icon="qrcode" size="large" onClick={showModal} />
-        </Fragment>
-      }
-    >
-      <List
-        dataSource={transaction}
-        renderItem={item => (
+    <Fragment>
+      <Helmet>
+        <title>Vexplorer | Transaction</title>
+      </Helmet>
+      <Card
+        title={
+          <Typography.Text copyable={{ text: id }}>
+            Transaction: { id }
+           </Typography.Text>
+        }
+        extra={
           <Fragment>
-            <List.Item>
-              <Typography.Text strong>Block Number:</Typography.Text>
-              <Link to={`/block/${item.meta.blockNumber}`}>
-                <Value>
-                  { item.meta.blockNumber }
-                </Value>
-              </Link>
-            </List.Item>
-            { item.paid &&
-              <List.Item>
-                <Typography.Text strong>Paid:</Typography.Text>
-                <Value>{ parseInt(item.paid, 16) }</Value>
-              </List.Item>
-            }
-            { item.reward &&
-              <List.Item>
-                <Typography.Text strong>Reward:</Typography.Text>
-                <Value>{ parseInt(item.reward, 16) }</Value>
-              </List.Item>
-            }
-            <List.Item>
-              <Typography.Text strong>Gas Used:</Typography.Text>
-              <Value>{item.gas}</Value>
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Clause Count:</Typography.Text>
-              <Value>{item.clauseCount}</Value>
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Timestamp:</Typography.Text>
-              <Value>{item.dateTime}</Value>
-            </List.Item>
-            <List.Item>
-              <div>
-                <Typography.Text strong>Status:</Typography.Text>
-                <Value>
-                  { item.reverted ? (
-                    <Tag color="red">Failed</Tag>
-                  ) : (
-                    <Tag color="green">Success</Tag>
-                  )}
-                </Value>
-              </div>
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Gas Payer: </Typography.Text>
-              <Typography.Text copyable={{ text: item.gasPayer }}>
-                <Value>
-                  <Link to={`/account/${item.gasPayer}`}>
-                    {item.gasPayer}
-                  </Link>
-                </Value>
-              </Typography.Text>
-            </List.Item>
+            <Button type="link" icon="qrcode" size="large" onClick={showModal} />
           </Fragment>
-        )}
-      />
-      <Modal
-        visible={visible}
-        onOk={closeModal}
-        onCancel={closeModal}
+        }
       >
-        <QRCodeWrapper>
-          <QRCode size={300} value={id} />
-        </QRCodeWrapper>
-      </Modal>
-    </Card>
+        <List
+          dataSource={transaction}
+          renderItem={item => (
+            <Fragment>
+              <List.Item>
+                <Typography.Text strong>Block Number:</Typography.Text>
+                <Link to={`/block/${item.meta.blockNumber}`}>
+                  <Value>
+                    { item.meta.blockNumber }
+                  </Value>
+                </Link>
+              </List.Item>
+              { item.paid &&
+                <List.Item>
+                  <Typography.Text strong>Paid:</Typography.Text>
+                  <Value>{ parseInt(item.paid, 16) }</Value>
+                </List.Item>
+              }
+              { item.reward &&
+                <List.Item>
+                  <Typography.Text strong>Reward:</Typography.Text>
+                  <Value>{ parseInt(item.reward, 16) }</Value>
+                </List.Item>
+              }
+              <List.Item>
+                <Typography.Text strong>Gas Used:</Typography.Text>
+                <Value>{item.gas}</Value>
+              </List.Item>
+              <List.Item>
+                <Typography.Text strong>Clause Count:</Typography.Text>
+                <Value>{item.clauseCount}</Value>
+              </List.Item>
+              <List.Item>
+                <Typography.Text strong>Timestamp:</Typography.Text>
+                <Value>{item.dateTime}</Value>
+              </List.Item>
+              <List.Item>
+                <div>
+                  <Typography.Text strong>Status:</Typography.Text>
+                  <Value>
+                    { item.reverted ? (
+                      <Tag color="red">Failed</Tag>
+                    ) : (
+                      <Tag color="green">Success</Tag>
+                    )}
+                  </Value>
+                </div>
+              </List.Item>
+              <List.Item>
+                <Typography.Text strong>Gas Payer: </Typography.Text>
+                <Typography.Text copyable={{ text: item.gasPayer }}>
+                  <Value>
+                    <Link to={`/account/${item.gasPayer}`}>
+                      {item.gasPayer}
+                    </Link>
+                  </Value>
+                </Typography.Text>
+              </List.Item>
+            </Fragment>
+          )}
+        />
+        <Modal
+          visible={visible}
+          onOk={closeModal}
+          onCancel={closeModal}
+        >
+          <QRCodeWrapper>
+            <QRCode size={300} value={id} />
+          </QRCodeWrapper>
+        </Modal>
+      </Card>
+    </Fragment>
   );
 };
 

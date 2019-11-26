@@ -20,6 +20,10 @@ const IconText = ({ type, text }: any) => (
 	</span>
 );
 
+function formatTime(time: Date) {
+  return format(new Date(time), 'HH:mm:ss');
+}
+
 function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [itemLoading, setItemLoading] = useState(false);
@@ -79,7 +83,7 @@ function Transactions() {
             <List.Item 
               //extra={<Tag color="blue">20,1239 VET</Tag>}
               actions={[
-                <IconText type="clock-circle" text={format(new Date(transaction.dateTime), "HH:mm:ss")} key="time" />,
+                <IconText type="clock-circle" text={formatTime(transaction.dateTime)} key="time" />,
                 <IconText type="number" text={`${transaction.clauseCount} clause(s)`} key="clauses" />
               ]}
             >

@@ -1,15 +1,12 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
-import QRCode from 'qrcode.react';
+import { fromUnixTime, format } from 'date-fns'
 import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { uniqueId } from 'lodash';
-import { Table, List, Typography, Modal, Card, Divider } from 'antd';
-
-import { createConnex } from '../../create-connex';
-
-const { connex } = createConnex('main');
+import { Table, List, Typography, Card, Divider, Progress } from 'antd';
+import { Helmet } from 'react-helmet';
 
 interface Transaction {
   id: string;
@@ -23,6 +20,7 @@ interface Meta {
 interface Block {
   signer: string;
   timestamp: Date | number;
+  gasLimit: number;
   gasUsed: number;
 };
 
@@ -63,26 +61,25 @@ const columns = [
 ];
 
 const initialBlock = {
+  gasLimit: 0,
   timestamp: 0,
   gasUsed: 0,
   signer: "",
 };
 
-const QRCodeWrapper = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-`;
-
 const Value = styled.span`
   margin-left: 10px;
 `;
+
+function formatTime(time: any) {
+  const date = fromUnixTime(time);
+  return format(date, 'LLL dd yyyy HH:mm:ss');
+}
 
 function Show() {
   const [block, setBlock] = useState<Block[]>([initialBlock]);
   const [total, setTotal] = useState(0);
   const [blockTransactions, setBlockTransactions] = useState([]);
-  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // @ts-ignore
@@ -95,6 +92,7 @@ function Show() {
 
       setBlock([{
         gasUsed: data.gasUsed,
+        gasLimit: data.gasLimit,
         signer: data.signer,
         timestamp: data.timestamp
       }]);
@@ -112,64 +110,62 @@ function Show() {
     getBlockTransactions()
   }, [ id ]);
 
-  function closeModal() {
-    setVisible(false);
-  }
-
   return (
-    <Card
-      loading={loading}
-      title={
-        <Typography.Text>
-          Block: { id }
-         </Typography.Text>
-      }
-    >
-      <List
-        dataSource={block}
-        renderItem={item => (
-          <Fragment>
-            <List.Item>
-              <Typography.Text strong>Timesamp:</Typography.Text>
-              <Value>
-                {item.timestamp}
-              </Value>
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Signer:</Typography.Text>
-              <Value>
-                <Link to={`/account/${item.signer}`}>
-                  {item.signer}
-                </Link>
-              </Value>
-            </List.Item>
-            <List.Item>
-              <Typography.Text strong>Gas Used:</Typography.Text>
-              <Value>
-                {item.gasUsed}
-              </Value>
-            </List.Item>
-          </Fragment>
-        )}
-      />
-      <Divider orientation="left">Transactions</Divider>
-      <Table
-        rowKey={(record: Transaction) => uniqueId('transaction_')}
-        pagination={{ total }}
+    <Fragment>
+      <Helmet>
+        <title>Vexplorer | Block</title>
+      </Helmet>
+      <Card
         loading={loading}
-        dataSource={blockTransactions}
-        columns={columns}
-      />
-      <Modal
-        visible={visible}
-        onOk={closeModal}
-        onCancel={closeModal}
+        title={
+          <Typography.Text>
+            Block: { id }
+           </Typography.Text>
+        }
       >
-        <QRCodeWrapper>
-          <QRCode size={300} value={id} />
-        </QRCodeWrapper>
-      </Modal>
-    </Card>
+        <List
+          dataSource={block}
+          renderItem={item => (
+            <Fragment>
+              <List.Item>
+                <Typography.Text strong>Timesamp:</Typography.Text>
+                <Value>
+                  {formatTime(item.timestamp)}
+                </Value>
+              </List.Item>
+              <List.Item>
+                <Typography.Text strong>Signer:</Typography.Text>
+                <Value>
+                  <Typography.Text copyable={{ text: item.signer }}>
+                    <Link to={`/account/${item.signer}`}>{ item.signer }</Link>
+                 </Typography.Text>
+                </Value>
+              </List.Item>
+              <List.Item>
+                <Typography.Text strong>Gas Used:</Typography.Text>
+                <Value>
+                  {item.gasUsed}
+                </Value>
+              </List.Item>
+              <List.Item>
+                <Typography.Text strong>Gas Limit:</Typography.Text>
+                <Value>
+                  {item.gasLimit}
+                </Value>
+              </List.Item>
+            </Fragment>
+          )}
+        />
+        <Divider orientation="left">Transactions</Divider>
+        <Table
+          rowKey={(record: Transaction) => uniqueId('transaction_')}
+          pagination={{ total }}
+          loading={loading}
+          dataSource={blockTransactions}
+          columns={columns}
+        />
+      </Card>
+    </Fragment>
   );
 };
 

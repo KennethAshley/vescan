@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'antd';
+import { Helmet } from 'react-helmet';
 
 import Blocks from '../components/Blocks';
 import Chart from '../components/Chart';
@@ -9,6 +10,10 @@ import Transactions from '../components/Transactions';
 const Home: React.FC = () => {
   return (
     <div>
+      <Helmet>
+        <title>Vexplorer</title>
+      </Helmet>
+
       <Chart />
       <Stats />
       <Row gutter={16}>
