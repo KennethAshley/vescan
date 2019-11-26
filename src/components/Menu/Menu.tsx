@@ -50,6 +50,13 @@ function Menu() {
           </a>
         </AntMenu.Item>
 
+        <AntMenu.Item key="tokens">
+          <NavLink to="/tokens">
+            <Icon type="user" />
+            Tokens
+          </NavLink>
+        </AntMenu.Item>
+
         { hasConnex &&
           <AntMenu.Item key="trade">
             <NavLink to="trade">

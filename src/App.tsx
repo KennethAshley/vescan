@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import {
   BrowserRouter as Router,
@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Home from './routes/Home';
+import Tokens from './routes/Tokens';
 
 import Trade from './routes/Trade';
 import {
@@ -47,6 +48,9 @@ function App() {
           <Switch>
             <Route path="/trade">
               <Trade />
+            </Route>
+            <Route path="/tokens">
+              <Tokens />
             </Route>
             <Route path="/transaction/:id">
               <Transaction />
