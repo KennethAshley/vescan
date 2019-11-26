@@ -82,7 +82,7 @@ function Search() {
 
       <SearchStyled>
         <Input.Search
-          addonBefore={selectBefore}
+          //addonBefore={selectBefore}
           size="large"
           enterButton="Search"
           placeholder="Search blocks / tx / accounts / vns domains"

@@ -124,17 +124,17 @@ function Charts() {
 
       <ExtraCharts>
         <Row gutter={12}>
-          <Col span={8}>
+          <Col sm={24} md={8} lg={8}>
             { !isEmpty(vthoBurned) &&
               <VETTransferred chart={vthoBurned} />
             }
           </Col>
-          <Col span={8}>
+          <Col sm={24} md={8} lg={8}>
             { !isEmpty(vthoBurned) &&
               <VTHOTransferred chart={vthoBurned} />
             }
           </Col>
-          <Col span={8}>
+          <Col sm={24} md={8} lg={8}>
             { !isEmpty(vthoBurned) &&
               <VTHOBurned chart={vthoBurned} />
             }
