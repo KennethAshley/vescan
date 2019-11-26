@@ -27,7 +27,7 @@ const columns = [
     title: 'Address',
     dataIndex: 'address',
     key: 'address',
-    render: (text: string) => <Address address={text} />
+    render: (text: string) => text ? <Address address={text} /> : '',
   },
   {
     title: 'Decimals',
@@ -42,7 +42,6 @@ function Tokens() {
 
   useEffect(() => {
     axios.get(`https://api.vexplorer.io/tokens`).then(({ data }) => {
-      console.log(data);
       setTokens(data['hydra:member']);
       setLoading(false);
     });

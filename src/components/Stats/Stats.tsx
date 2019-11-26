@@ -25,6 +25,7 @@ const StyledCard = styled(Card)`
 `;
 
 function Stats() {
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     vet_price: 0,
     market_cap: 0,
@@ -37,6 +38,7 @@ function Stats() {
     async function getStats() {
       const { data } = await axios.get("https://api.vexplorer.io/statistics/meta");
       setStats(data);
+      setLoading(false);
     }
 
     getStats();
@@ -44,19 +46,19 @@ function Stats() {
 
   return (
     <StyledStats>
-      <StyledCard>
+      <StyledCard loading={loading}>
         <Statistic title="Accounts" value={stats.accounts} prefix={<Icon type="user" />} />
       </StyledCard>
-      <StyledCard>
+      <StyledCard loading={loading}>
         <Statistic title="Blocks" value={stats.blocks} prefix={<Icon type="gold" />} />
       </StyledCard>
-      <StyledCard>
+      <StyledCard loading={loading}>
         <Statistic title="VET Value" value={stats.vet_price} prefix="$" precision={5} />
       </StyledCard>
-      <StyledCard>
+      <StyledCard loading={loading}>
         <Statistic title="Market Cap" value={stats.market_cap} prefix="$" />
       </StyledCard>
-      <StyledCard>
+      <StyledCard loading={loading}>
         <Statistic title="Trade Volume" value={stats.volume} prefix="$" />
       </StyledCard>
     </StyledStats>

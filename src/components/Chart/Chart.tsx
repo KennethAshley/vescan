@@ -43,6 +43,7 @@ function formatTime(time: number | string) {
 
 function Charts() {
   const [transactions, setTransactions] = useState(0);
+  const [zoom, setZoom] = useState('1day');
   const [clauses, setClauses] = useState(0);
   const [vthoBurned, setVthoBurned] = useState({});
 
@@ -51,7 +52,9 @@ function Charts() {
   useEffect(() => {
     let chart: any;
 
-    axios.get("https://api.vexplorer.io/statistics/chart").then(({ data }) => {
+    axios.get("https://api.vexplorer.io/statistics/chart", {
+      params: { zoom },
+    }).then(({ data }) => {
       const [transactions, clauses, vthoBurned] = data.datasets;
       const formattedLabels = data.labels.map((label: string) => {
         return formatTime(label);
@@ -88,7 +91,7 @@ function Charts() {
         chart.destroy();
       }
     }
-  }, [ transactions, clauses ]);
+  }, [ transactions, clauses, zoom ]);
 
   return (
     <Fragment>
@@ -97,19 +100,19 @@ function Charts() {
         style={{ marginBottom: '32px' }}
         extra={
           <Button.Group>
-            <Button type="link">
+            <Button onClick={() => setZoom('1day')}>
               1d
             </Button>
-            <Button type="link">
+            <Button onClick={() => setZoom('7day')}>
               7d
             </Button>
-            <Button type="link">
+            <Button onClick={() => setZoom('1month')}>
               1m
             </Button>
-            <Button type="link">
+            <Button onClick={() => setZoom('3month')}>
               3m
             </Button>
-            <Button type="link">
+            <Button onClick={() => setZoom('1year')}>
               1y
             </Button>
           </Button.Group>
