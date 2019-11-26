@@ -98,19 +98,19 @@ function Charts() {
         extra={
           <Button.Group>
             <Button type="link">
-              Day
+              1d
             </Button>
             <Button type="link">
-              Week
+              7d
             </Button>
             <Button type="link">
-              Month
+              1m
             </Button>
             <Button type="link">
-              Quarter
+              3m
             </Button>
             <Button type="link">
-              Year
+              1y
             </Button>
           </Button.Group>
         }

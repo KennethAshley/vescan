@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import Numeral from 'numeral';
 import { Card, Statistic, Icon } from 'antd';
 
 const StyledStats = styled.div`
@@ -25,7 +26,10 @@ const StyledCard = styled(Card)`
 
 function Stats() {
   const [stats, setStats] = useState({
+    vet_price: 0,
+    market_cap: 0,
     accounts: 0,
+    volume: 0,
     blocks: 0,
   });
 
@@ -36,7 +40,7 @@ function Stats() {
     }
 
     getStats();
-  });
+  }, [ stats ]);
 
   return (
     <StyledStats>
@@ -47,13 +51,13 @@ function Stats() {
         <Statistic title="Blocks" value={stats.blocks} prefix={<Icon type="gold" />} />
       </StyledCard>
       <StyledCard>
-        <Statistic title="VET Value" value={0.0061} prefix={<Icon type="dollar" />} />
+        <Statistic title="VET Value" value={stats.vet_price} prefix="$" precision={5} />
       </StyledCard>
       <StyledCard>
-        <Statistic title="Market Cap" value="$341,499,191" prefix={<Icon type="stock" />} />
+        <Statistic title="Market Cap" value={stats.market_cap} prefix="$" />
       </StyledCard>
       <StyledCard>
-        <Statistic title="Trade Volume" value="$122,629,346" prefix={<Icon type="area-chart" />} />
+        <Statistic title="Trade Volume" value={stats.volume} prefix="$" />
       </StyledCard>
     </StyledStats>
   );
