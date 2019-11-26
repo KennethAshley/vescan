@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { Card, Statistic, Icon } from 'antd';
 
 const StyledStats = styled.div`
@@ -23,13 +24,27 @@ const StyledCard = styled(Card)`
 `;
 
 function Stats() {
+  const [stats, setStats] = useState({
+    accounts: 0,
+    blocks: 0,
+  });
+
+  useEffect(() => {
+    async function getStats() {
+      const { data } = await axios.get("https://api.vexplorer.io/statistics/meta");
+      setStats(data);
+    }
+
+    getStats();
+  });
+
   return (
     <StyledStats>
       <StyledCard>
-        <Statistic title="Accounts" value={160456} prefix={<Icon type="user" />} />
+        <Statistic title="Accounts" value={stats.accounts} prefix={<Icon type="user" />} />
       </StyledCard>
       <StyledCard>
-        <Statistic title="Blocks" value={4671399} prefix={<Icon type="gold" />} />
+        <Statistic title="Blocks" value={stats.blocks} prefix={<Icon type="gold" />} />
       </StyledCard>
       <StyledCard>
         <Statistic title="VET Value" value={0.0061} prefix={<Icon type="dollar" />} />

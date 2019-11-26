@@ -15,7 +15,7 @@ type Account = {
 
 const { TabPane } = Tabs;
 
-const accountTableColumns = [
+const columns = [
   {
     title: 'Address',
     dataIndex: 'address',
@@ -53,7 +53,8 @@ function List() {
     axios.get("https://api.vexplorer.io/accounts", {
       params: {
         page,
-        itemsPerPage: 10,
+        itemsPerPage: 30,
+        partial: false,
       },
     }).then(({ data }) => {
       setTotal(data["hydra:totalItems"]);
@@ -80,7 +81,7 @@ function List() {
             onChange={handleTableChange}
             loading={loading}
             dataSource={accounts}
-            columns={accountTableColumns}
+            columns={columns}
           />
         </TabPane>
         <TabPane tab="Favorites" key="2">

@@ -31,7 +31,8 @@ function Transactions() {
     axios.get("https://api.vexplorer.io/transactions", {
       params: {
         page: 1,
-        itemsPerPage: 14
+        itemsPerPage: 30,
+        partial: false,
       }
     }).then(({ data }) => {
       setTransactions(data["hydra:member"]);

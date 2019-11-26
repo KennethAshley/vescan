@@ -76,7 +76,8 @@ function List() {
     axios.get("https://api.vexplorer.io/transactions", {
       params: {
         page,
-        itemsPerPage: 10,
+        itemsPerPage: 30,
+        partial: false,
       },
     }).then(({ data }) => {
       setTotal(data["hydra:totalItems"]);

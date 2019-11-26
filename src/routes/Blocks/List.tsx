@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet';
 import Address from '../../components/Address';
 
 type Block = {
-  id: string
+  id: string;
 };
 
 const columns = [
@@ -79,7 +79,8 @@ function Blocks() {
     axios.get("https://api.vexplorer.io/blocks", {
       params: {
         page,
-        itemsPerPage: 10,
+        itemsPerPage: 30,
+        partial: false,
       },
     }).then(({ data }) => {
       setTotal(data["hydra:totalItems"]);
