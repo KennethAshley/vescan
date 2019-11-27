@@ -1,11 +1,7 @@
+import React, { useEffect, useRef } from 'react';
 import { Chart } from "frappe-charts/dist/frappe-charts.min.esm";
-
-import React, {
-  useEffect,
-  useRef,
-} from 'react';
-
 import { Card } from 'antd';
+import styled from 'styled-components';
 
 function VTHOBurned({ chart: data }: any) {
   const chartRef = useRef(null);

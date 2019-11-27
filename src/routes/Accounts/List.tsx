@@ -1,10 +1,11 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Table, Tabs, List as AntList } from 'antd';
+import { Table, Tabs, List as AntList, Button, Icon } from 'antd';
 import { uniqueId } from 'lodash';
 import { useLocalStorage } from 'react-use';
 import { Helmet } from 'react-helmet';
+import styled from 'styled-components';
 
 import Address from '../../components/Address';
 import Balance from '../../components/Balance';
@@ -13,7 +14,13 @@ type Account = {
   address: string
 };
 
+const Pagination = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
 const { TabPane } = Tabs;
+const ButtonGroup = Button.Group;
 
 const columns = [
   {
@@ -63,10 +70,22 @@ function List() {
     });
   }, [ page ]);
 
-  function handleTableChange(pagination: any) {
-    setLoading(true);
-    setPage(pagination.current);
+  function goBack() {
+    setPage(currentPage => {
+      const nextPage = currentPage - 1;
+
+      return nextPage; 
+    });
   }
+
+  function goForward() {
+    setPage(currentPage => {
+      const nextPage = currentPage + 1;
+
+      return nextPage; 
+    });
+  }
+
 
   return (
     <Fragment>
@@ -77,11 +96,24 @@ function List() {
         <TabPane tab="All Accounts" key="1">
           <Table
             rowKey={(record: Account) => uniqueId('account_')}
-            pagination={{ total }}
-            onChange={handleTableChange}
+            pagination={false}
             loading={loading}
             dataSource={accounts}
             columns={columns}
+            footer={() => (
+              <Pagination>
+                <ButtonGroup>
+                  <Button type="primary" onClick={() => goBack()}>
+                    <Icon type="left" />
+                    Previous Page
+                  </Button>
+                  <Button type="primary" onClick={() => goForward()}>
+                    Next Page
+                    <Icon type="right" />
+                  </Button>
+                </ButtonGroup>
+              </Pagination>
+            )}
           />
         </TabPane>
         <TabPane tab="Favorites" key="2">

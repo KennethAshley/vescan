@@ -35,6 +35,12 @@ const Statistics = styled.div`
 
 const ExtraCharts = styled.div`
   margin-bottom: 32px;
+
+  .frappe-chart {
+    .x.axis text {
+      display: none;
+    }
+  }
 `;
 
 function formatTime(time: number | string) {

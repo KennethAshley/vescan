@@ -2,11 +2,19 @@ import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { fromUnixTime, format } from 'date-fns'
-import { Table, Progress, Typography } from 'antd';
+import { Table, Progress, Typography, Button, Icon } from 'antd';
 import { uniqueId } from 'lodash';
 import { Helmet } from 'react-helmet';
+import styled from 'styled-components';
 
 import Address from '../../components/Address';
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const ButtonGroup = Button.Group;
 
 type Block = {
   id: string;
@@ -80,17 +88,28 @@ function Blocks() {
       params: {
         page,
         itemsPerPage: 30,
-        partial: false,
       },
     }).then(({ data }) => {
-      setTotal(data["hydra:totalItems"]);
+      setTotal(data["hydra:member"][0].number)
       setBlocks(data["hydra:member"]);
       setLoading(false);
     });
   }, [ page ]);
 
-  function handleTableChange(pagination: any) {
-    setPage(pagination.current);
+  function goBack() {
+    setPage(currentPage => {
+      const nextPage = currentPage - 1;
+
+      return nextPage; 
+    });
+  }
+
+  function goForward() {
+    setPage(currentPage => {
+      const nextPage = currentPage + 1;
+
+      return nextPage; 
+    });
   }
 
   return (
@@ -101,11 +120,24 @@ function Blocks() {
 
       <Table
         rowKey={(record: Block) => uniqueId('block_')}
-        pagination={{ total }}
-        onChange={handleTableChange}
+        pagination={false}
         loading={loading}
         dataSource={blocks}
         columns={columns}
+        footer={() => (
+          <Pagination>
+            <ButtonGroup>
+              <Button type="primary" onClick={() => goBack()}>
+                <Icon type="left" />
+                Previous Page
+              </Button>
+              <Button type="primary" onClick={() => goForward()}>
+                Next Page
+                <Icon type="right" />
+              </Button>
+            </ButtonGroup>
+          </Pagination>
+        )}
       />
     </Fragment>
   );

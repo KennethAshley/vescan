@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import { truncate } from 'lodash';
 import { format } from 'date-fns'
 import { uniqueId } from 'lodash';
-import { Table, Tabs } from 'antd';
+import { Table, Tabs, Button, Icon } from 'antd';
 import { Helmet } from 'react-helmet';
+import styled from 'styled-components';
 
 import Address from '../../components/Address';
 
@@ -14,6 +15,12 @@ type Transaction = {
 }
 
 const { TabPane } = Tabs;
+const ButtonGroup = Button.Group;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 const columns = [
   {
@@ -70,24 +77,33 @@ function List() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     axios.get("https://api.vexplorer.io/transactions", {
       params: {
         page,
         itemsPerPage: 30,
-        partial: false,
       },
     }).then(({ data }) => {
-      setTotal(data["hydra:totalItems"]);
       setTransactions(data["hydra:member"]);
       setLoading(false);
     });
   }, [ page ]);
 
-  function handleTableChange(pagination: any) {
-    setPage(pagination.current);
+  function goBack() {
+    setPage(currentPage => {
+      const nextPage = currentPage - 1;
+
+      return nextPage; 
+    });
+  }
+
+  function goForward() {
+    setPage(currentPage => {
+      const nextPage = currentPage + 1;
+
+      return nextPage; 
+    });
   }
 
   return (
@@ -99,12 +115,25 @@ function List() {
         <TabPane tab="Transactions" key="1">
           <Table
             rowKey={(record: Transaction) => uniqueId('transaction_')}
-            pagination={{ total }}
-            onChange={handleTableChange}
+            pagination={false}
             loading={loading}
             dataSource={transactions}
             columns={columns}
-          />
+            footer={() => (
+              <Pagination>
+                <ButtonGroup>
+                  <Button type="primary" onClick={() => goBack()}>
+                    <Icon type="left" />
+                    Previous Page
+                  </Button>
+                  <Button type="primary" onClick={() => goForward()}>
+                    Next Page
+                    <Icon type="right" />
+                  </Button>
+                </ButtonGroup>
+            </Pagination>
+          )}
+        />
         </TabPane>
         <TabPane tab="Token Transfers" key="2">
         </TabPane>
