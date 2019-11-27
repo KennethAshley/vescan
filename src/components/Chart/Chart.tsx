@@ -43,7 +43,7 @@ function formatTime(time: number | string) {
 
 function Charts() {
   const [transactions, setTransactions] = useState(0);
-  const [zoom, setZoom] = useState('1day');
+  const [zoom, setZoom] = useState('1month');
   const [clauses, setClauses] = useState(0);
   const [vthoBurned, setVthoBurned] = useState({});
 
@@ -68,6 +68,9 @@ function Charts() {
         colors: ['#1890ff', '#ffb420'],
         type: 'line',
         height: 400,
+        axisOptions: {
+          xIsSeries: true
+        },
         data: {
           labels: formattedLabels,
           datasets: [
