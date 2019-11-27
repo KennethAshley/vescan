@@ -42,7 +42,7 @@ function Stats() {
     }
 
     getStats();
-  }, [ stats ]);
+  }, []);
 
   return (
     <StyledStats>

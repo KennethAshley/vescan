@@ -32,7 +32,6 @@ function Transactions() {
       params: {
         page: 1,
         itemsPerPage: 30,
-        partial: false,
       }
     }).then(({ data }) => {
       setTransactions(data["hydra:member"]);

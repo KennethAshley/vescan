@@ -33,7 +33,6 @@ function Blocks() {
       params: {
         page: 1,
         itemsPerPage: 30,
-        partial: false,
       }
     }).then(({ data }) => {
       setBlocks(data["hydra:member"]);
