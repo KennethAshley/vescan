@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import { Typography } from 'antd';
 import { Helmet } from 'react-helmet';
@@ -9,7 +10,11 @@ const Iframe = styled.iframe`
   width: 100%;
 `;
 
-const Trade: React.FC = () => {
+function Trade() {
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   return (
     <div>
       <Helmet>

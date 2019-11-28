@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactGA from 'react-ga';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { Table } from 'antd';
@@ -41,6 +42,10 @@ const columns = [
 function List() {
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   useEffect(() => {
     axios.get(`https://api.vexplorer.io/tokens`).then(({ data }) => {

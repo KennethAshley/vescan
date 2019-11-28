@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
+import ReactGA from 'react-ga';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { fromUnixTime, format } from 'date-fns'
@@ -82,6 +83,10 @@ function Blocks() {
   const [blocks, setBlocks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   useEffect(() => {
     axios.get("https://api.vexplorer.io/blocks", {

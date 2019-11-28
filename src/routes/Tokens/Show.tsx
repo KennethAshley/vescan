@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
+import ReactGA from 'react-ga';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { Link } from 'react-router-dom';
@@ -39,6 +40,10 @@ function Show() {
   const [token, setToken] = useState<Token>(initialToken);
   // @ts-ignore
   const { id } = useParams<string>();
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   useEffect(() => {
     async function getToken() {

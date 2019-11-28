@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment, useContext } from 'react';
+import ReactGA from 'react-ga';
 import axios from 'axios';
 import QRCode from 'qrcode.react';
 import { useParams } from "react-router-dom";
@@ -36,6 +37,10 @@ function Show() {
   const price = useContext<any>(PriceContext);
   // @ts-ignore
   const { address } = useParams<string>();
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   useEffect(() => {
     async function getAccount() {

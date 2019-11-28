@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
+import ReactGA from 'react-ga';
 import axios from 'axios';
 import QRCode from 'qrcode.react';
 import { useParams } from "react-router-dom";
@@ -74,6 +75,10 @@ function Show() {
 
   // @ts-ignore
   const { id } = useParams<string>();
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   useEffect(() => {
     async function getTransactionData() {

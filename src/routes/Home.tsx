@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import ReactGA from 'react-ga';
 import { Row, Col } from 'antd';
 import { Helmet } from 'react-helmet';
 
@@ -7,7 +8,11 @@ import Chart from '../components/Chart';
 import Stats from '../components/Stats';
 import Transactions from '../components/Transactions';
 
-const Home: React.FC = () => {
+function Home() {
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   return (
     <div>
       <Helmet>
@@ -25,7 +30,7 @@ const Home: React.FC = () => {
         </Col>
       </Row>
     </div>
-  );
+  )
 }
 
 export default Home;

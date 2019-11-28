@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
+import ReactGA from 'react-ga';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Tabs, List as AntList, Button, Icon } from 'antd';
@@ -55,6 +56,10 @@ function List() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   useEffect(() => {
     axios.get("https://api.vexplorer.io/accounts", {
