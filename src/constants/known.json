@@ -21,6 +21,14 @@
       "address": "0x64594d4e1c9296c15384441fc1640d9812b51ffd"
     },
     {
+      "label": "OceanEx VTHO Wallet",
+      "address": "0x284b9e222c461e32c2fa17053e2ea207041cffa0"
+    },
+    {
+      "label": "OceanEx BAG Wallet",
+      "address": "0x14db82cc90a6cbe876cc24adcfe2953cfdacfee9"
+    },
+    {
       "label": "Foundation 4",
       "address": "0x0bd7b06debd1522e75e4b91ff598f107fd826c8a"
     },
@@ -49,12 +57,16 @@
       "address": "0xe13322e57366a4dff3a3a32b33355ff2bd2c4dbd"
     },
     {
-      "label": "Vexchange",
+      "label": "Vexchange VTHO Contract",
       "address": "0xf9f99f982f3ea9020f0a0afd4d4679dfee1b63cf"
     },
     {
       "label": "LBank",
       "address": "0xfa02e5f286f635df9378395f4be54647e73a66a0"
+    },
+    {
+      "label": "VeChain Node Contract",
+      "address": "0xb81e9c5f9644dec9e5e3cac86b4461a222072302"
     }
   ]
 }
