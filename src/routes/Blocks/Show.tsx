@@ -35,20 +35,10 @@ const columns = [
     render: (text: string) => <Link to={`/transaction/${text}`}>{ text }</Link>
   },
   {
-    title: 'VET',
-    dataIndex: 'balance',
-    key: 'balance',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Block',
-    dataIndex: 'block',
-    key: 'block',
-    render: (text: string) => <Link to={`/block/${text.split('/').pop()}`}>{ text.split('/').pop() }</Link>
+    title: 'Timestamp',
+    dataIndex: 'dateTime',
+    key: 'datetime',
+    render: (text: Date) => format(new Date(text), "LLL dd yyyy HH:mm:ss"),
   },
   {
     title: 'From',
@@ -164,7 +154,7 @@ function Show() {
         <Divider orientation="left">Transactions</Divider>
         <Table
           rowKey={(record: Transaction) => uniqueId('transaction_')}
-          pagination={{ total }}
+          pagination={false}
           loading={loading}
           dataSource={blockTransactions}
           columns={columns}

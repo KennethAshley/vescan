@@ -36,7 +36,7 @@ function Search() {
       try {
         const block = await connex.thor.block(value).get();
         if (block) {
-          return history.push(`/block/${block.id}`)
+          return history.push(`/block/${block.number}`)
 
         }
       } catch(err) {
@@ -61,7 +61,7 @@ function Search() {
           const block = await connex.thor.block(num).get();
 
           if (block) {
-            return history.push(`/block/${block.id}`);
+            return history.push(`/block/${block.number}`);
 
           }
         } catch (err) {
