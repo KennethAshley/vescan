@@ -66,7 +66,6 @@ function List() {
       params: {
         page,
         itemsPerPage: 30,
-        partial: false,
       },
     }).then(({ data }) => {
       setTotal(data["hydra:totalItems"]);
@@ -124,11 +123,9 @@ function List() {
         <TabPane tab="Favorites" key="2">
           <AntList
             dataSource={savedAccounts}
-            renderItem={item => (
+            renderItem={(item: any) => (
               <AntList.Item>
-                <Link to={`/account/${item}`}>
-                  { item }
-                </Link>
+                <Address address={item} />
               </AntList.Item>
             )}
           />
