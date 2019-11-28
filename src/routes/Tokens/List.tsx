@@ -3,8 +3,9 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { Table } from 'antd';
 import { uniqueId } from 'lodash';
+import { Link } from 'react-router-dom';
 
-import Address from '../components/Address';
+import Address from '../../components/Address';
 
 type Token = {
   name: string;
@@ -22,6 +23,7 @@ const columns = [
     title: 'Symbol',
     dataIndex: 'symbol',
     key: 'symbol',
+    render: (text: string) => <Link to={`/token/${text}`}>{text}</Link>,
   },
   {
     title: 'Address',
@@ -36,7 +38,7 @@ const columns = [
   },
 ];
 
-function Tokens() {
+function List() {
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -65,4 +67,4 @@ function Tokens() {
   );
 }
 
-export default Tokens;
+export default List;

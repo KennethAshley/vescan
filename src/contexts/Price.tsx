@@ -7,8 +7,17 @@ type PriceProps = {
 
 export const PriceContext = React.createContext(0);
 
+const initialPrices = {
+  vechain: {
+    usd: 0,
+  },
+  'vethor-token': {
+    usd: 0,
+  },
+};
+
 function PriceProvider({ children }: PriceProps) {
-  const [ prices, setPrices ] = useState(0);
+  const [ prices, setPrices ] = useState(initialPrices);
 
   useEffect(() => {
     async function getPrice() {
@@ -21,6 +30,7 @@ function PriceProvider({ children }: PriceProps) {
   }, []);
 
   return (
+    // @ts-ignore
     <PriceContext.Provider value={prices}>
       { children }
     </PriceContext.Provider>

@@ -38,20 +38,29 @@ function Show() {
   const { address } = useParams<string>();
 
   useEffect(() => {
-    axios.get(`https://api.vexplorer.io/accounts/${address}`).then(({ data }) => {
+    async function getAccount() {
+      const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address}`);
+
       setAccount([{
         balance: data.balance,
         code: data.code,
         energy: data.energy,
       }]);
 
-    });
+      setLoading(false);
+    }
+
+    async function getTokenTransfers() {
+      const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address}/token_transfers`);
+      console.log(data)
+    }
 
     if (savedAccounts && savedAccounts.includes(address)) {
       setSaved(true);
     }
 
-    setLoading(false);
+    getAccount();
+    getTokenTransfers();
   }, [ savedAccounts, address ]);
 
   function showModal() {

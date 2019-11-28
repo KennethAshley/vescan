@@ -32,7 +32,7 @@ function Blocks() {
     axios.get("https://api.vexplorer.io/blocks", {
       params: {
         page: 1,
-        itemsPerPage: 30,
+        itemsPerPage: 10,
       }
     }).then(({ data }) => {
       setBlocks(data["hydra:member"]);

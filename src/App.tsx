@@ -7,7 +7,11 @@ import {
 } from "react-router-dom";
 
 import Home from './routes/Home';
-import Tokens from './routes/Tokens';
+
+import {
+  List as Tokens,
+  Show as Token,
+} from './routes/Tokens';
 
 import Trade from './routes/Trade';
 import {
@@ -51,6 +55,9 @@ function App() {
             </Route>
             <Route path="/tokens">
               <Tokens />
+            </Route>
+            <Route path="/token/:id">
+              <Token />
             </Route>
             <Route path="/transaction/:id">
               <Transaction />
