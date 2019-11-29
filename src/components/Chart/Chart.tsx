@@ -131,12 +131,13 @@ function Charts() {
               type: 'linear',
               stacked: true,
             }}
+            curve={'natural'}
             axisTop={null}
             axisRight={null}
             axisLeft={null}
             enableArea={true}
+            enablePoints={false}
             colors={[ '#1890ff', '#ffb420' ]}
-            pointSize={10}
             pointColor={{ theme: 'background' }}
             pointBorderWidth={2}
             pointBorderColor={{ from: 'serieColor' }}
