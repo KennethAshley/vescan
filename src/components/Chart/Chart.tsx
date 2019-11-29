@@ -68,14 +68,16 @@ function Charts() {
 
       chart = new Chart(chartRef.current, {
         lineOptions: {
-          regionFill: 1
+          regionFill: 1,
+          dotSize: 1,
         },
         isNavigable: true,
         colors: ['#1890ff', '#ffb420'],
         type: 'line',
         height: 400,
         axisOptions: {
-          xIsSeries: true
+          xIsSeries: true,
+          xAxisMode: 'tick'
         },
         data: {
           labels: formattedLabels,
