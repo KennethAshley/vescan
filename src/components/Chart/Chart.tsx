@@ -69,7 +69,7 @@ function Charts() {
       chart = new Chart(chartRef.current, {
         lineOptions: {
           regionFill: 1,
-          dotSize: 1,
+          hideDots: 1
         },
         isNavigable: true,
         colors: ['#1890ff', '#ffb420'],
