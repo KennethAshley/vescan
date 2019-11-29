@@ -62,7 +62,7 @@ function Charts() {
   const [vthoBurned, setVthoBurned] = useState({});
 
   useEffect(() => {
-    axios.get("http://api.vexplorer.io/statistics/chart", {
+    axios.get("https://api.vexplorer.io/statistics/chart", {
       params: { zoom },
     }).then(({ data }) => {
       const cls = data.find((item: any) => item.id === 'Clauses');
