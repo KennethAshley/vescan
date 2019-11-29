@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { Chart } from "frappe-charts/dist/frappe-charts.min.esm";
 import { format } from 'date-fns';
 import styled from 'styled-components';
-import { isEmpty } from 'lodash';
+import { ResponsiveLine } from '@nivo/line'
+
+import { isEmpty, last } from 'lodash';
 
 import React, {
   Fragment,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 
@@ -43,66 +43,45 @@ const ExtraCharts = styled.div`
   }
 `;
 
+const Wrapper = styled.div`
+  height: 400px;
+`;
+
 function formatTime(time: number | string) {
   return format(new Date(time), "LLL dd yyyy");
 }
 
 function Charts() {
-  const [transactions, setTransactions] = useState(0);
   const [zoom, setZoom] = useState('1month');
-  const [clauses, setClauses] = useState(0);
+  const [clauseCount, setClauseCount] = useState(0);
+  const [transactionCount, setTransactionCount] = useState(0);
+
+  const [clauses, setClauses] = useState({});
+  const [transactions, setTransactions] = useState({});
+
   const [vthoBurned, setVthoBurned] = useState({});
 
-  const chartRef = useRef(null);
-
   useEffect(() => {
-    let chart: any;
-
-    axios.get("https://api.vexplorer.io/statistics/chart", {
+    axios.get("http://api.vexplorer.io/statistics/chart", {
       params: { zoom },
     }).then(({ data }) => {
-      const [transactions, clauses, vthoBurned] = data.datasets;
-      const formattedLabels = data.labels.map((label: string) => {
-        return formatTime(label);
-      });
+      const cls = data.find((item: any) => item.id === 'Clauses');
+      const txs = data.find((item: any) => item.id === 'Transactions');
+      const vthoB = data.find((item: any) => item.id === 'VTHO Burned');
 
-      chart = new Chart(chartRef.current, {
-        lineOptions: {
-          regionFill: 1,
-          hideDots: 1
-        },
-        isNavigable: true,
-        colors: ['#1890ff', '#ffb420'],
-        type: 'line',
-        height: 400,
-        axisOptions: {
-          xIsSeries: true,
-          xAxisMode: 'tick'
-        },
-        data: {
-          labels: formattedLabels,
-          datasets: [
-            transactions,
-            clauses
-          ],
-        }
-      });
+      // @ts-ignore
+      const { y: txCount } = last(txs.data);
+      // @ts-ignore
+      const { y: clsCount } = last(cls.data);
 
-      setVthoBurned({
-        datasets: [vthoBurned],
-        labels: formattedLabels
-      });
+      setClauses(cls);
+      setTransactions(txs);
+      setVthoBurned(vthoB);
 
-      setClauses(clauses.values[clauses.values.length - 1]);
-      setTransactions(transactions.values[transactions.values.length - 1]);
+      setClauseCount(clsCount);
+      setTransactionCount(txCount);
     });
-
-    return () => {
-      if (chart) {
-        chart.destroy();
-      }
-    }
-  }, [ transactions, clauses, zoom ]);
+  }, [ zoom ]);
 
   return (
     <Fragment>
@@ -130,10 +109,44 @@ function Charts() {
         }
       >
         <Statistics>
-          <Statistic title="Transactions" value={transactions} prefix={<Icon type="swap" />}/>
-          <Statistic title="Clauses" value={clauses} prefix={<Icon type="gold" />}/>
+          <Statistic title="Transactions" value={transactionCount} prefix={<Icon type="swap" />}/>
+          <Statistic title="Clauses" value={clauseCount} prefix={<Icon type="gold" />}/>
         </Statistics>
-        <div ref={chartRef} />
+
+      <Wrapper>
+        { (!isEmpty(transactions) && !isEmpty(clauses)) &&
+          // @ts-ignore
+          <ResponsiveLine
+            data={[
+              transactions,
+              clauses
+            ]}
+            margin={{
+              top: 30,
+              right: 30,
+              bottom: 30,
+              left: 40
+            }}
+            yScale={{
+              type: 'linear',
+              stacked: true,
+            }}
+            axisTop={null}
+            axisRight={null}
+            axisLeft={null}
+            enableArea={true}
+            colors={[ '#1890ff', '#ffb420' ]}
+            pointSize={10}
+            pointColor={{ theme: 'background' }}
+            pointBorderWidth={2}
+            pointBorderColor={{ from: 'serieColor' }}
+            enableGridX={false}
+            enableSlices={'x'}
+            useMesh={true}
+          />
+        }
+      </Wrapper>
+
       </Card>
 
       <ExtraCharts>
@@ -155,7 +168,6 @@ function Charts() {
           </Col>
         </Row>
       </ExtraCharts>
-
     </Fragment>
   );
 }
