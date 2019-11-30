@@ -196,7 +196,7 @@ function Show() {
           )}
         />
 
-        <Divider orientation="left">Token Transfers</Divider>
+        <Divider>Token Transfers</Divider>
 
         <Table
           rowKey={(record: Transaction) => uniqueId('transaction_')}
@@ -207,10 +207,10 @@ function Show() {
         />
 
         { (tokenBalances.length > 0) &&
-          <Divider orientation="left">Token Balances</Divider>
+          <Divider>Token Balances</Divider>
         }
 
-        <Row gutter={12}>
+        <Row gutter={24}>
           { tokenBalances.map(({ amount, token }: TokenBalance) => (
             <Col span={6} key={token.symbol} style={{ marginBottom: '12px' }}>
               <Card title={token.symbol}>
