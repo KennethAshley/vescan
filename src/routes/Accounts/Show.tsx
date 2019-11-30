@@ -4,19 +4,47 @@ import axios from 'axios';
 import QRCode from 'qrcode.react';
 import { useParams } from "react-router-dom";
 import styled from 'styled-components';
-import { List, Typography, Modal, Button, Card  } from 'antd';
 import { useLocalStorage } from 'react-use';
 import { Helmet } from 'react-helmet';
+import { uniqueId } from 'lodash';
+import {
+  List,
+  Typography,
+  Modal,
+  Button,
+  Card,
+  Statistic,
+  Row,
+  Col,
+  Table,
+  Divider,
+} from 'antd';
 
 import { PriceContext } from '../../contexts/Price';
 import Address from '../../components/Address';
 import Balance from '../../components/Balance';
+
+type Transaction = {
+  id: string;
+}
 
 type Account = {
   balance: number;
   code: boolean;
   energy: number;
 }
+
+type Token = {
+  name: string;
+  address: string;
+  description: string;
+  symbol: string;
+};
+
+type TokenBalance = {
+  amount: number;
+  token: Token;
+};
 
 const QRCodeWrapper = styled.div`
   align-items: center;
@@ -28,8 +56,35 @@ const Value = styled.span`
   margin-left: 10px;
 `;
 
+const columns = [
+  {
+    title: 'Token',
+    dataIndex: 'token.name',
+    key: 'name',
+  },
+  {
+    title: 'From',
+    dataIndex: 'fromAddress',
+    key: 'from',
+    render: (text: string) => <Address address={text} />
+  },
+  {
+    title: 'To',
+    dataIndex: 'toAddress',
+    key: 'to',
+    render: (text: string) => <Address address={text} />
+  },
+    {
+    title: 'Amount',
+    dataIndex: 'amount',
+    key: 'amount',
+  },
+];
+
 function Show() {
   const [account, setAccount] = useState<Account[]>([]);
+  const [tokenBalances, setTokenBalances] = useState([]);
+  const [tokenTransfers, setTokenTransfers] = useState([]);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [savedAccounts, setSavedAccounts] = useLocalStorage<string[]>('accounts', []);
@@ -57,7 +112,12 @@ function Show() {
 
     async function getTokenTransfers() {
       const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address}/token_transfers`);
-      console.log(data)
+      setTokenTransfers(data["hydra:member"]);
+    }
+
+    async function getTokenBalances() {
+      const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address}/token_balances`);
+      setTokenBalances(data["hydra:member"]);
     }
 
     if (savedAccounts && savedAccounts.includes(address)) {
@@ -65,6 +125,7 @@ function Show() {
     }
 
     getAccount();
+    getTokenBalances();
     getTokenTransfers();
   }, [ savedAccounts, address ]);
 
@@ -134,6 +195,35 @@ function Show() {
             </Fragment>
           )}
         />
+
+        <Divider orientation="left">Token Transfers</Divider>
+
+        <Table
+          rowKey={(record: Transaction) => uniqueId('transaction_')}
+          pagination={false}
+          loading={loading}
+          dataSource={tokenTransfers}
+          columns={columns}
+        />
+
+        { (tokenBalances.length > 0) &&
+          <Divider orientation="left">Token Balances</Divider>
+        }
+
+        <Row gutter={12}>
+          { tokenBalances.map(({ amount, token }: TokenBalance) => (
+            <Col span={6} key={token.symbol} style={{ marginBottom: '12px' }}>
+              <Card title={token.symbol}>
+                <Statistic
+                  title={token.name}
+                  value={amount}
+                />
+              </Card>
+            </Col>
+          )) }
+        </Row>
+
+
         <Modal
           visible={visible}
           onOk={closeModal}
@@ -144,6 +234,7 @@ function Show() {
           </QRCodeWrapper>
         </Modal>
       </Card>
+
     </Fragment>
   );
 };
