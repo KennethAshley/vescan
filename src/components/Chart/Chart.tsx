@@ -90,9 +90,6 @@ function Charts() {
         style={{ marginBottom: '32px' }}
         extra={
           <Button.Group>
-            <Button onClick={() => setZoom('1day')}>
-              1d
-            </Button>
             <Button onClick={() => setZoom('7day')}>
               7d
             </Button>
@@ -101,9 +98,6 @@ function Charts() {
             </Button>
             <Button onClick={() => setZoom('3month')}>
               3m
-            </Button>
-            <Button onClick={() => setZoom('1year')}>
-              1y
             </Button>
           </Button.Group>
         }
@@ -131,7 +125,16 @@ function Charts() {
               type: 'linear',
               stacked: true,
             }}
-            curve={'natural'}
+            xScale={{
+              type: 'time',
+              format: '%Y-%m-%d',
+              precision: 'day',
+            }}
+            xFormat="time:%Y-%m-%d"
+            axisBottom={{
+              format: '%b %d',
+              tickValues: 15,
+            }}
             axisTop={null}
             axisRight={null}
             axisLeft={null}
