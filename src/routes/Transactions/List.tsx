@@ -10,9 +10,13 @@ import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 
 import Address from '../../components/Address';
+import Balance from '../../components/Balance';
 
 type Transaction = {
-  id: string
+  id: string;
+}
+
+type TokenTransfer = {
 }
 
 const { TabPane } = Tabs;
@@ -22,6 +26,32 @@ const Pagination = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
+
+const tokenTransfersColumns = [
+  {
+    title: 'Token',
+    dataIndex: 'token.name',
+    key: 'name',
+  },
+  {
+    title: 'From',
+    dataIndex: 'fromAddress',
+    key: 'from',
+    render: (text: string) => <Address address={text} />
+  },
+  {
+    title: 'To',
+    dataIndex: 'toAddress',
+    key: 'to',
+    render: (text: string) => <Address address={text} />
+  },
+    {
+    title: 'Amount',
+    dataIndex: 'amount',
+    key: 'amount',
+    render: (text: number) => <Balance balance={text} />
+  },
+];
 
 const columns = [
   {
@@ -76,6 +106,7 @@ function formatTime(time: number) {
 
 function List() {
   const [transactions, setTransactions] = useState([]);
+  const [tokenTransfers, setTokenTransfers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
@@ -85,15 +116,31 @@ function List() {
   }, []);
 
   useEffect(() => {
-    axios.get("https://api.vexplorer.io/transactions", {
-      params: {
-        page,
-        itemsPerPage: 30,
-      },
-    }).then(({ data }) => {
-      setTransactions(data["hydra:member"]);
+    async function getTransactions() {
+      const { data } = await axios.get("https://api.vexplorer.io/transactions", {
+        params: {
+          page,
+          itemsPerPage: 30,
+        }
+      });
+
       setLoading(false);
-    });
+      setTransactions(data["hydra:member"]);
+    }
+
+    async function getTransfers() {
+      const { data } = await axios.get("https://api.vexplorer.io/token_transfers", {
+        params: {
+          page,
+          itemsPerPage: 30,
+        }
+      });
+
+      setTokenTransfers(data["hydra:member"]);
+    }
+
+    getTransfers();
+    getTransactions();
   }, [ page ]);
 
   function goBack() {
@@ -142,6 +189,27 @@ function List() {
         />
         </TabPane>
         <TabPane tab="Token Transfers" key="2">
+          <Table
+            rowKey={(record: TokenTransfer) => uniqueId('transfer_')}
+            pagination={false}
+            loading={loading}
+            dataSource={tokenTransfers}
+            columns={tokenTransfersColumns}
+            footer={() => (
+              <Pagination>
+                <ButtonGroup>
+                  <Button type="primary" onClick={() => goBack()}>
+                    <Icon type="left" />
+                    Previous Page
+                  </Button>
+                  <Button type="primary" onClick={() => goForward()}>
+                    Next Page
+                    <Icon type="right" />
+                  </Button>
+                </ButtonGroup>
+            </Pagination>
+          )}
+        />
         </TabPane>
       </Tabs>
     </Fragment>
