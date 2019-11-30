@@ -19,6 +19,7 @@ function Home() {
         <title>Vexplorer</title>
       </Helmet>
 
+      <Chart />
       <Stats />
       <Row gutter={16}>
         <Col sm={24} md={24} lg={12}>
