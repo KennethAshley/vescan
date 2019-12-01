@@ -134,6 +134,7 @@ function Charts() {
             axisBottom={{
               format: '%b %d',
               tickValues: 15,
+              tickRotation: -45,
             }}
             axisTop={null}
             axisRight={null}
