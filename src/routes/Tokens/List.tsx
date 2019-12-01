@@ -5,8 +5,17 @@ import { Helmet } from 'react-helmet';
 import { Table } from 'antd';
 import { uniqueId } from 'lodash';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 import Address from '../../components/Address';
+
+const Image = styled.div`
+  width: 20px;
+
+  img {
+    max-width: 100%;
+  }
+`;
 
 type Token = {
   name: string;
@@ -25,6 +34,21 @@ const columns = [
     dataIndex: 'symbol',
     key: 'symbol',
     render: (text: string) => <Link to={`/token/${text}`}>{text}</Link>,
+  },
+  {
+    title: "Icon",
+    dataIndex: 'address',
+    key: 'icon',
+    render: (text: string, record: any) => {
+      return (
+        <Image>
+          <img
+            src={`https://raw.githubusercontent.com/vechain/token-registry/master/tokens/main/${text}/token.png`}
+            alt={`${record.name} icon`}
+          />
+        </Image>
+      );
+    }
   },
   {
     title: 'Address',

@@ -46,6 +46,16 @@ type TokenBalance = {
   token: Token;
 };
 
+const Image = styled.span`
+  display: inline-block;
+  margin-right: 10px;
+  width: 20px;
+
+  img {
+    max-width: 100%;
+  }
+`;
+
 const QRCodeWrapper = styled.div`
   align-items: center;
   display: flex;
@@ -204,11 +214,18 @@ function Show() {
             <Row gutter={24}>
               { tokenBalances.map(({ amount, token }: TokenBalance) => (
                 <Col span={6} key={token.symbol} style={{ marginBottom: '12px' }}>
-                  <Card title={token.symbol}>
-                    <Statistic
-                      title={token.name}
-                      value={amount}
-                    />
+                  <Card title={
+                    <Fragment>
+                      <Image>
+                        <img
+                          src={`https://raw.githubusercontent.com/vechain/token-registry/master/tokens/main/${token.address}/token.png`}
+                          alt={`${token.name} icon`}
+                        />
+                      </Image>
+                      {token.name}
+                    </Fragment>
+                  }>
+                    <Statistic value={amount} />
                   </Card>
                 </Col>
               )) }
