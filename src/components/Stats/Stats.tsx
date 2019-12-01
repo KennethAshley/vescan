@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import Numeral from 'numeral';
 import { Card, Statistic, Icon } from 'antd';
 
 const StyledStats = styled.div`

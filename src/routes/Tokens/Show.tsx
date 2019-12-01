@@ -2,12 +2,9 @@ import React, { useEffect, useState, Fragment } from 'react';
 import ReactGA from 'react-ga';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
-import { Link } from 'react-router-dom';
-import { Descriptions, Badge } from 'antd';
+import { Descriptions } from 'antd';
 import { Helmet } from 'react-helmet';
-import { ethers } from 'ethers';
 
-import { createConnex } from '../../create-connex';
 import Address from '../../components/Address';
 
 type Token = {
@@ -53,20 +50,26 @@ function Show() {
 
     getToken();
   }, [ id ]);
+
   return (
-    <Descriptions title={token.name} bordered>
-      <Descriptions.Item label="Address">
-        <Address address={token.address} />
-      </Descriptions.Item>
-      <Descriptions.Item label="Decimals">{ token.decimals }</Descriptions.Item>
-      <Descriptions.Item label="Symbol">{ token.symbol }</Descriptions.Item>
-      <Descriptions.Item label="Description">{ token.description }</Descriptions.Item>
-      <Descriptions.Item label="Price">{ token.price }</Descriptions.Item>
-      <Descriptions.Item label="Total Supply">{ token.totalSupply }</Descriptions.Item>
-      <Descriptions.Item label="Volume">{ token.volume }</Descriptions.Item>
-      <Descriptions.Item label="Circulating Supply">{ token.circulatingSupply }</Descriptions.Item>
-      <Descriptions.Item label="Market Cap">{ token.marketCap }</Descriptions.Item>
-    </Descriptions>
+    <Fragment>
+      <Helmet>
+        <title>Vexplorer | Tokens</title>
+      </Helmet>
+      <Descriptions title={token.name} bordered>
+        <Descriptions.Item label="Address">
+          <Address address={token.address} />
+        </Descriptions.Item>
+        <Descriptions.Item label="Decimals">{ token.decimals }</Descriptions.Item>
+        <Descriptions.Item label="Symbol">{ token.symbol }</Descriptions.Item>
+        <Descriptions.Item label="Description">{ token.description }</Descriptions.Item>
+        <Descriptions.Item label="Price">{ token.price }</Descriptions.Item>
+        <Descriptions.Item label="Total Supply">{ token.totalSupply }</Descriptions.Item>
+        <Descriptions.Item label="Volume">{ token.volume }</Descriptions.Item>
+        <Descriptions.Item label="Circulating Supply">{ token.circulatingSupply }</Descriptions.Item>
+        <Descriptions.Item label="Market Cap">{ token.marketCap }</Descriptions.Item>
+      </Descriptions>
+    </Fragment>
   );
 };
 

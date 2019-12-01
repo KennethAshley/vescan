@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactGA from 'react-ga';
 import styled from 'styled-components';
-import { Typography, Button, Card } from 'antd';
+import { Typography, Button } from 'antd';
 import { Helmet } from 'react-helmet';
 
 const Iframe = styled.iframe`

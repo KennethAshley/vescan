@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import ReactGA from 'react-ga';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { Table, Tabs, List as AntList, Button, Icon } from 'antd';
 import { uniqueId } from 'lodash';
 import { useLocalStorage } from 'react-use';
@@ -55,7 +54,6 @@ function List() {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -68,7 +66,6 @@ function List() {
         itemsPerPage: 30,
       },
     }).then(({ data }) => {
-      setTotal(data["hydra:totalItems"]);
       setAccounts(data["hydra:member"]);
       setLoading(false);
     });

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { format } from 'date-fns';
 import styled from 'styled-components';
 import { ResponsiveLine } from '@nivo/line'
 
@@ -46,10 +45,6 @@ const ExtraCharts = styled.div`
 const Wrapper = styled.div`
   height: 400px;
 `;
-
-function formatTime(time: number | string) {
-  return format(new Date(time), "LLL dd yyyy");
-}
 
 function Charts() {
   const [zoom, setZoom] = useState('1month');

@@ -3,7 +3,7 @@ import ReactGA from 'react-ga';
 import axios from 'axios';
 import QRCode from 'qrcode.react';
 import { useParams } from "react-router-dom";
-import { fromUnixTime, format } from 'date-fns'
+import { format } from 'date-fns'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { List, Tag, Typography, Modal, Button, Card } from 'antd';
