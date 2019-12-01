@@ -1,27 +1,9 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import { ResponsiveLine } from '@nivo/line'
-
 import { isEmpty, last } from 'lodash';
-
-import React, {
-  Fragment,
-  useEffect,
-  useState,
-} from 'react';
-
-import {
-  Button,
-  Card,
-  Col,
-  Icon,
-  Row,
-  Statistic,
-} from 'antd';
-
-import VTHOBurned from './VTHOBurned';
-import VETTransferred from './VETTransferred';
-import VTHOTransferred from './VTHOTransferred';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Button, Card, Icon, Statistic } from 'antd';
 
 const Statistics = styled.div`
   display: flex;
@@ -29,16 +11,6 @@ const Statistics = styled.div`
 
   .ant-statistic {
     margin: 0 20px;
-  }
-`;
-
-const ExtraCharts = styled.div`
-  margin-bottom: 32px;
-
-  .frappe-chart {
-    .x.axis text {
-      display: none;
-    }
   }
 `;
 
@@ -54,15 +26,12 @@ function Charts() {
   const [clauses, setClauses] = useState({});
   const [transactions, setTransactions] = useState({});
 
-  const [vthoBurned, setVthoBurned] = useState({});
-
   useEffect(() => {
     axios.get("https://api.vexplorer.io/statistics/chart", {
       params: { zoom },
     }).then(({ data }) => {
       const cls = data.find((item: any) => item.id === 'Clauses');
       const txs = data.find((item: any) => item.id === 'Transactions');
-      const vthoB = data.find((item: any) => item.id === 'VTHO Burned');
 
       // @ts-ignore
       const { y: txCount } = last(txs.data);
@@ -71,7 +40,6 @@ function Charts() {
 
       setClauses(cls);
       setTransactions(txs);
-      setVthoBurned(vthoB);
 
       setClauseCount(clsCount);
       setTransactionCount(txCount);
@@ -149,25 +117,6 @@ function Charts() {
 
       </Card>
 
-      <ExtraCharts>
-        <Row gutter={12}>
-          <Col sm={24} md={8} lg={8}>
-            { !isEmpty(vthoBurned) &&
-              <VETTransferred chart={vthoBurned} />
-            }
-          </Col>
-          <Col sm={24} md={8} lg={8}>
-            { !isEmpty(vthoBurned) &&
-              <VTHOTransferred chart={vthoBurned} />
-            }
-          </Col>
-          <Col sm={24} md={8} lg={8}>
-            { !isEmpty(vthoBurned) &&
-              <VTHOBurned chart={vthoBurned} />
-            }
-          </Col>
-        </Row>
-      </ExtraCharts>
     </Fragment>
   );
 }
