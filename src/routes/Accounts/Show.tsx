@@ -186,21 +186,21 @@ function Show() {
           renderItem={item => (
             <Fragment>
               <List.Item>
-                <Typography.Text strong>Balance:</Typography.Text>
+                <Typography.Text strong>VET:</Typography.Text>
                 <Value>
                   <Balance balance={item.balance} price={price.vechain.usd} />
                 </Value>
               </List.Item>
               <List.Item>
-                <Typography.Text strong>Energy:</Typography.Text>
+                <Typography.Text strong>VTHO:</Typography.Text>
                 <Value>
                   <Balance balance={item.energy} price={price['vethor-token'].usd}/>
                 </Value>
               </List.Item>
               <List.Item>
-                <Typography.Text strong>Has Code:</Typography.Text> 
+                <Typography.Text strong>Contract:</Typography.Text> 
                 <Value>
-                  {item.code ? 'True' : 'False'}
+                  {item.code ? 'Yes' : 'No'}
                 </Value>
               </List.Item>
             </Fragment>
