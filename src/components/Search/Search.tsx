@@ -11,18 +11,6 @@ const SearchStyled = styled.div`
   margin-bottom: 32px;
 `;
 
-const { Option } = Select;
-
-const selectBefore = (
-  <Select defaultValue="All Filters" style={{ width: 150 }}>
-    <Option value="addresses">Addresses</Option>
-    <Option value="tokens">Tokens</Option>
-    <Option value="Name Tags">Name Tags</Option>
-    <Option value="Labels">Labels</Option>
-    <Option value="Labels">Labels</Option>
-  </Select>
-);
-
 function Search() {
   const history = useHistory();
   const { connex } = createConnex('main');
@@ -82,7 +70,6 @@ function Search() {
 
       <SearchStyled>
         <Input.Search
-          //addonBefore={selectBefore}
           size="large"
           enterButton="Search"
           placeholder="Search blocks / tx / accounts / vns domains"

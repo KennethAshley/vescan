@@ -197,33 +197,39 @@ function Show() {
           )}
         />
 
-        <Divider>Token Transfers</Divider>
+        { (tokenBalances.length > 0) && (
+          <Fragment>
+            <Divider>Token Balances</Divider>
 
-        <Table
-          rowKey={(record: Transaction) => uniqueId('transaction_')}
-          pagination={false}
-          loading={loading}
-          dataSource={tokenTransfers}
-          columns={columns}
-        />
+            <Row gutter={24}>
+              { tokenBalances.map(({ amount, token }: TokenBalance) => (
+                <Col span={6} key={token.symbol} style={{ marginBottom: '12px' }}>
+                  <Card title={token.symbol}>
+                    <Statistic
+                      title={token.name}
+                      value={amount}
+                    />
+                  </Card>
+                </Col>
+              )) }
+            </Row>
 
-        { (tokenBalances.length > 0) &&
-          <Divider>Token Balances</Divider>
-        }
+          </Fragment>
+        )}
 
-        <Row gutter={24}>
-          { tokenBalances.map(({ amount, token }: TokenBalance) => (
-            <Col span={6} key={token.symbol} style={{ marginBottom: '12px' }}>
-              <Card title={token.symbol}>
-                <Statistic
-                  title={token.name}
-                  value={amount}
-                />
-              </Card>
-            </Col>
-          )) }
-        </Row>
+        { (tokenTransfers.length > 0) && (
+          <Fragment>
+            <Divider>Token Transfers</Divider>
 
+            <Table
+              rowKey={(record: Transaction) => uniqueId('transaction_')}
+              pagination={false}
+              loading={loading}
+              dataSource={tokenTransfers}
+              columns={columns}
+            />
+          </Fragment>
+        )}
 
         <Modal
           visible={visible}

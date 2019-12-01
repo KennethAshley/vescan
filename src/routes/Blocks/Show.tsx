@@ -151,7 +151,7 @@ function Show() {
             </Fragment>
           )}
         />
-        <Divider orientation="left">Transactions</Divider>
+        <Divider>Transactions</Divider>
         <Table
           rowKey={(record: Transaction) => uniqueId('transaction_')}
           pagination={false}
