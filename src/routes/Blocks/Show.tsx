@@ -71,7 +71,6 @@ function formatTime(time: any) {
 
 function Show() {
   const [block, setBlock] = useState<Block[]>([initialBlock]);
-  const [total, setTotal] = useState(0);
   const [blockTransactions, setBlockTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -100,7 +99,6 @@ function Show() {
     async function getBlockTransactions() {
       const { data } = await axios.get(`https://api.vexplorer.io/blocks/${id}/transactions`);
       setBlockTransactions(data["hydra:member"]);
-      setTotal(data["hydra:totalItems"]);
     }
 
     getBlock()

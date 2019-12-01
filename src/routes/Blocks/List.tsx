@@ -79,7 +79,6 @@ function formatTime(time: number) {
 }
 
 function Blocks() {
-  const [total, setTotal] = useState(0);
   const [blocks, setBlocks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -95,7 +94,6 @@ function Blocks() {
         itemsPerPage: 30,
       },
     }).then(({ data }) => {
-      setTotal(data["hydra:member"][0].number)
       setBlocks(data["hydra:member"]);
       setLoading(false);
     });
