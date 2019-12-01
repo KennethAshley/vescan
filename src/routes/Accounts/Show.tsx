@@ -36,6 +36,7 @@ type Account = {
 }
 
 type Token = {
+  price: number;
   name: string;
   address: string;
   description: string;
@@ -222,18 +223,22 @@ function Show() {
             <Row gutter={24}>
               { tokenBalances.map(({ amount, token }: TokenBalance) => (
                 <Col span={6} key={token.symbol} style={{ marginBottom: '12px' }}>
-                  <Card title={
-                    <Fragment>
-                      <Image>
-                        <img
-                          src={`https://raw.githubusercontent.com/vechain/token-registry/master/tokens/main/${token.address}/token.png`}
-                          alt={`${token.name} icon`}
-                        />
-                      </Image>
-                      {token.name}
-                    </Fragment>
-                  }>
-                    <Statistic value={amount} />
+                  <Card
+                    title={
+                      <Fragment>
+                        <Image>
+                          <img
+                            src={`https://raw.githubusercontent.com/vechain/token-registry/master/tokens/main/${token.address}/token.png`}
+                            alt={`${token.name} icon`}
+                          />
+                        </Image>
+                        {token.name}
+                      </Fragment>
+                    }
+                    extra={
+                      <small>{ Numeral(amount * token.price).format('$0,00.00') }</small>
+                    }>
+                      <Statistic value={amount} />
                   </Card>
                 </Col>
               )) }
