@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { useLocalStorage } from 'react-use';
 import { Helmet } from 'react-helmet';
 import { uniqueId } from 'lodash';
+import Numeral from 'numeral';
 import {
   List,
   Typography,
@@ -88,7 +89,14 @@ const columns = [
     title: 'Amount',
     dataIndex: 'amount',
     key: 'amount',
-    render: (text: number) => <Balance balance={text} />
+    render: (text: number, record: any) => {
+      return (
+        <Fragment>
+          <Balance balance={text} />
+          <small>{ Numeral(text * record.token.price).format('$0,00.00') }</small>
+        </Fragment>
+      );
+    }
   },
 ];
 
