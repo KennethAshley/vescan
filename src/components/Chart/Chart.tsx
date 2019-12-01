@@ -118,7 +118,7 @@ function Charts() {
             margin={{
               top: 30,
               right: 30,
-              bottom: 30,
+              bottom: 40,
               left: 40
             }}
             yScale={{
