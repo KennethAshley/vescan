@@ -76,7 +76,7 @@ function Blocks() {
   }
 
   return (
-    <Card title="Recent Blocks" extra={<Link to="/blocks">Vew All</Link>}>
+    <Card title="Recent Blocks" extra={<Link to="/blocks">View All</Link>}>
       <List
         loading={loading}
         itemLayout="vertical"

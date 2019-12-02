@@ -71,7 +71,7 @@ function Transactions() {
 
 
   return (
-    <Card title="Recent Transactions" extra={<Link to="/transactions">Vew All</Link>}>
+    <Card title="Recent Transactions" extra={<Link to="/transactions">View All</Link>}>
       <List
         loading={loading}
         itemLayout="vertical"
