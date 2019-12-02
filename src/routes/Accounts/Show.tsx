@@ -222,7 +222,7 @@ function Show() {
 
             <Row gutter={24}>
               { tokenBalances.map(({ amount, token }: TokenBalance) => (
-                <Col span={6} key={token.symbol} style={{ marginBottom: '12px' }}>
+                <Col sm={12} md={6} lg={6} key={token.symbol} style={{ marginBottom: '12px' }}>
                   <Card
                     title={
                       <Fragment>

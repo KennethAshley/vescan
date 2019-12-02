@@ -70,50 +70,50 @@ function Charts() {
           <Statistic title="Clauses" value={clauseCount} prefix={<Icon type="gold" />}/>
         </Statistics>
 
-      <Wrapper>
-        { (!isEmpty(transactions) && !isEmpty(clauses)) &&
-          // @ts-ignore
-          <ResponsiveLine
-            data={[
-              transactions,
-              clauses
-            ]}
-            margin={{
-              top: 30,
-              right: 30,
-              bottom: 40,
-              left: 40
-            }}
-            yScale={{
-              type: 'linear',
-              stacked: true,
-            }}
-            xScale={{
-              type: 'time',
-              format: '%Y-%m-%d',
-              precision: 'day',
-            }}
-            xFormat="time:%Y-%m-%d"
-            axisBottom={{
-              format: '%b %d',
-              tickValues: 15,
-              tickRotation: -45,
-            }}
-            axisTop={null}
-            axisRight={null}
-            axisLeft={null}
-            enableArea={true}
-            enablePoints={false}
-            colors={[ '#1890ff', '#ffb420' ]}
-            pointColor={{ theme: 'background' }}
-            pointBorderWidth={2}
-            pointBorderColor={{ from: 'serieColor' }}
-            enableGridX={false}
-            enableSlices={'x'}
-            useMesh={true}
-          />
-        }
-      </Wrapper>
+        <Wrapper>
+          { (!isEmpty(transactions) && !isEmpty(clauses)) &&
+            // @ts-ignore
+            <ResponsiveLine
+              data={[
+                transactions,
+                clauses
+              ]}
+              margin={{
+                top: 30,
+                right: 30,
+                bottom: 40,
+                left: 30
+              }}
+              yScale={{
+                type: 'linear',
+                stacked: true,
+              }}
+              xScale={{
+                type: 'time',
+                format: '%Y-%m-%d',
+                precision: 'day',
+              }}
+              xFormat="time:%Y-%m-%d"
+              axisBottom={{
+                format: '%b %d',
+                tickValues: 15,
+                tickRotation: -45,
+              }}
+              axisTop={null}
+              axisRight={null}
+              axisLeft={null}
+              enableArea={true}
+              enablePoints={false}
+              colors={[ '#1890ff', '#ffb420' ]}
+              pointColor={{ theme: 'background' }}
+              pointBorderWidth={2}
+              pointBorderColor={{ from: 'serieColor' }}
+              enableGridX={false}
+              enableSlices={'x'}
+              useMesh={true}
+            />
+          }
+        </Wrapper>
 
       </Card>
 
