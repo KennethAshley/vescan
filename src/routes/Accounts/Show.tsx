@@ -9,16 +9,17 @@ import { Helmet } from 'react-helmet';
 import { uniqueId } from 'lodash';
 import Numeral from 'numeral';
 import {
-  List,
-  Typography,
-  Modal,
   Button,
   Card,
-  Statistic,
-  Row,
   Col,
-  Table,
   Divider,
+  Icon,
+  List,
+  Modal,
+  Row,
+  Statistic,
+  Table,
+  Typography,
 } from 'antd';
 
 import { PriceContext } from '../../contexts/Price';
@@ -47,6 +48,13 @@ type TokenBalance = {
   amount: number;
   token: Token;
 };
+
+const ButtonGroup = Button.Group;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 const Image = styled.span`
   display: inline-block;
@@ -110,6 +118,7 @@ function Show() {
   const [savedAccounts, setSavedAccounts] = useLocalStorage<string[]>('accounts', []);
   const [saved, setSaved] = useState(false);
   const price = useContext<any>(PriceContext);
+  const [page, setPage] = useState(1);
   // @ts-ignore
   const { address } = useParams<string>();
 
@@ -131,7 +140,12 @@ function Show() {
     }
 
     async function getTokenTransfers() {
-      const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address}/token_transfers`);
+      const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address}/token_transfers`, {
+        params: {
+          page,
+          itemsPerPage: 30,
+        },
+      });
       setTokenTransfers(data["hydra:member"]);
     }
 
@@ -167,6 +181,22 @@ function Show() {
       ...oldAddresses,
       ...Array.from(addresses),
     ]));
+  }
+
+  function goBack() {
+    setPage(currentPage => {
+      const nextPage = currentPage - 1;
+
+      return nextPage; 
+    });
+  }
+
+  function goForward() {
+    setPage(currentPage => {
+      const nextPage = currentPage + 1;
+
+      return nextPage; 
+    });
   }
 
   return (
@@ -257,6 +287,20 @@ function Show() {
               loading={loading}
               dataSource={tokenTransfers}
               columns={columns}
+              footer={() => (
+                <Pagination>
+                  <ButtonGroup>
+                    <Button type="primary" onClick={() => goBack()}>
+                      <Icon type="left" />
+                      Previous Page
+                    </Button>
+                    <Button type="primary" onClick={() => goForward()}>
+                      Next Page
+                      <Icon type="right" />
+                    </Button>
+                  </ButtonGroup>
+                </Pagination>
+              )}
             />
           </Fragment>
         )}
