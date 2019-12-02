@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { format, fromUnixTime } from 'date-fns'
-import { List, Tag, Card, Icon, Statistic, Skeleton } from 'antd';
+import { List, Tag, Card, Icon, Statistic, Skeleton, Progress } from 'antd';
 
-import Balance from '../Balance';
+import Address from '../Address';
 
 type Block = {
   loading: boolean;
-  number: number 
-  gasUsed: number
-  txsFeatures: number
-  timestamp: number
-  transactionCount: number
-  totalScore: number
+  number: number;
+  gasUsed: number;
+  txsFeatures: number;
+  timestamp: number;
+  transactionCount: number;
+  signer: string; 
 };
 
 const IconText = ({ type, text }: any) => (
@@ -86,22 +86,25 @@ function Blocks() {
             <List.Item 
               extra={
                 <Tag color="blue">
-                  <Balance balance={block.totalScore} suffix="VET" />
+                  <IconText type="number" text={`${block.transactionCount} txn(s)`} key="transactions" />
                 </Tag>
               }
               actions={[
                 <IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />,
-                <IconText type="number" text={`${block.transactionCount} txn(s)`} key="transactions" />,
                 <IconText type="thunderbolt" text={`${block.gasUsed} Gas`} key="gas" />,
               ]}
             >
-                <List.Item.Meta
-                  title={
-                    <Link to={`/block/${block.number}`}>
-                      <Statistic title="Block" value={block.number} />
-                    </Link>
-                  }
-                />
+              <List.Item.Meta
+                title={
+                  <Link to={`/block/${block.number}`}>
+                    <Statistic title="Block" value={block.number} />
+                  </Link>
+                }
+              />
+              <div>
+                <small>Signer: </small>
+              </div>
+              <Address address={block.signer} />
             </List.Item>
           </Skeleton>
         )}
