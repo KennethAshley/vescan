@@ -75,6 +75,10 @@ function Blocks() {
     return format(date, 'HH:mm:ss');
   }
 
+  function vthoBurned(gasUsed: number) {
+    return ((gasUsed / 1000) * 0.7).toFixed(2);
+  }
+
   return (
     <Card title="Recent Blocks" extra={<Link to="/blocks">View All</Link>}>
       <List
@@ -91,7 +95,7 @@ function Blocks() {
               }
               actions={[
                 <IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />,
-                <IconText type="thunderbolt" text={`${Numeral(block.gasUsed).format('0,0')} Gas`} key="gas" />,
+                <IconText type="fire" text={`${vthoBurned(block.gasUsed)} VTHO Burned`} key="vtho" />
               ]}
             >
               <List.Item.Meta
