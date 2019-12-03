@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { format } from 'date-fns'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { List, Tag, Typography, Modal, Button, Card, Table } from 'antd';
+import { List, Tag, Typography, Modal, Button, Card, Table, Divider } from 'antd';
 import { Helmet } from 'react-helmet';
 import { ethers } from 'ethers';
 
@@ -210,6 +210,7 @@ function Show() {
                   <Address address={item.gasPayer} />
                 </Value>
               </List.Item>
+              <Divider>Clauses</Divider>
               <List.Item>
                 <Table
                   columns={columns}
