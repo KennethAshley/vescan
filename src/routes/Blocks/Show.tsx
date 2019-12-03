@@ -10,6 +10,7 @@ import { Table, List, Typography, Card, Divider } from 'antd';
 import { Helmet } from 'react-helmet';
 
 import Address from '../../components/Address';
+import Balance from '../../components/Balance';
 
 interface Transaction {
   id: string;
@@ -137,13 +138,13 @@ function Show() {
               <List.Item>
                 <Typography.Text strong>Gas Used:</Typography.Text>
                 <Value>
-                  {item.gasUsed}
+                  <Balance balance={item.gasUsed} />
                 </Value>
               </List.Item>
               <List.Item>
                 <Typography.Text strong>Gas Limit:</Typography.Text>
                 <Value>
-                  {item.gasLimit}
+                  <Balance balance={item.gasLimit} />
                 </Value>
               </List.Item>
             </Fragment>

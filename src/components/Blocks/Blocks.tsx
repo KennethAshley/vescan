@@ -5,6 +5,7 @@ import { format, fromUnixTime } from 'date-fns'
 import { List, Tag, Card, Icon, Skeleton, Statistic } from 'antd';
 
 import Address from '../Address';
+import Balance from '../Balance';
 
 type Block = {
   loading: boolean;
@@ -41,8 +42,7 @@ function Blocks() {
   }, []);
 
   useEffect(() => {
-    const url = new URL('https://api.vexplorer.io:3000/.well-known/mercure');
-    url.searchParams.append('topic', 'block-latest');
+    const url = new URL('https://mercure.vexplorer.io/.well-known/mercure?topic=block-latest');
     //@ts-ignore
     const eventSource = new EventSource(url);
 
