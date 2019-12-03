@@ -6,6 +6,7 @@ import { Descriptions } from 'antd';
 import { Helmet } from 'react-helmet';
 
 import Address from '../../components/Address';
+import Balance from '../../components/Balance';
 
 type Token = {
   address: string;
@@ -65,9 +66,15 @@ function Show() {
         <Descriptions.Item label="Description">{ token.description }</Descriptions.Item>
         <Descriptions.Item label="Price">{ token.price }</Descriptions.Item>
         <Descriptions.Item label="Total Supply">{ token.totalSupply }</Descriptions.Item>
-        <Descriptions.Item label="Volume">{ token.volume }</Descriptions.Item>
-        <Descriptions.Item label="Circulating Supply">{ token.circulatingSupply }</Descriptions.Item>
-        <Descriptions.Item label="Market Cap">{ token.marketCap }</Descriptions.Item>
+        <Descriptions.Item label="Volume">
+          <Balance balance={token.volume} />
+        </Descriptions.Item>
+        <Descriptions.Item label="Circulating Supply">
+          <Balance balance={token.circulatingSupply} />
+        </Descriptions.Item>
+        <Descriptions.Item label="Market Cap">
+          <Balance balance={token.marketCap} />
+        </Descriptions.Item>
       </Descriptions>
     </Fragment>
   );
