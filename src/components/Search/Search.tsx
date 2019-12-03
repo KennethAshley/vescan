@@ -17,6 +17,8 @@ function Search() {
   const vns = new VNS(connex);
 
   async function handleSearch(value: string) {
+    value = value.toLowerCase();
+
     if (/^0x[0-9a-f]{40}$/i.test(value)) {
       return history.push(`/account/${value}`);
 

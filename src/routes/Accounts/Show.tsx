@@ -128,7 +128,7 @@ function Show() {
 
   useEffect(() => {
     async function getAccount() {
-      const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address}`);
+      const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address.toLowerCase()}`);
 
       setAccount([{
         balance: data.balance,
