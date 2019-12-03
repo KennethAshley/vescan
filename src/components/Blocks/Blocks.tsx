@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { format, fromUnixTime } from 'date-fns'
-import { List, Tag, Card, Icon, Statistic, Skeleton, Progress } from 'antd';
+import { List, Tag, Card, Icon, Skeleton, Statistic } from 'antd';
 
 import Address from '../Address';
 
@@ -96,9 +96,16 @@ function Blocks() {
             >
               <List.Item.Meta
                 title={
-                  <Link to={`/block/${block.number}`}>
-                    <Statistic title="Block" value={block.number} />
-                  </Link>
+                  <Fragment>
+                    <Link to={`/block/${block.number}`}>
+                      <Statistic
+                        title="Block"
+                        value={block.number}
+                        valueStyle={{ color: '#1890ff' }}
+                        prefix={<Icon type="gold" />}
+                      />
+                    </Link>
+                  </Fragment>
                 }
               />
               <div>
