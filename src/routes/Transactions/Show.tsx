@@ -64,6 +64,7 @@ const columns = [
     title: 'To',
     dataIndex: 'to',
     key: 'to',
+    render: (text: string) => <Address address={text} />
   },
 ];
 
