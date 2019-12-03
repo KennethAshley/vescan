@@ -3,9 +3,9 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { format, fromUnixTime } from 'date-fns'
 import { List, Tag, Card, Icon, Skeleton, Statistic } from 'antd';
+import Numeral from 'numeral';
 
 import Address from '../Address';
-import Balance from '../Balance';
 
 type Block = {
   loading: boolean;
@@ -91,7 +91,7 @@ function Blocks() {
               }
               actions={[
                 <IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />,
-                <IconText type="thunderbolt" text={`${block.gasUsed} Gas`} key="gas" />,
+                <IconText type="thunderbolt" text={`${Numeral(block.gasUsed).format('0,0')} Gas`} key="gas" />,
               ]}
             >
               <List.Item.Meta
