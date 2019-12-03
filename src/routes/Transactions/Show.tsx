@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { format } from 'date-fns'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { List, Tag, Typography, Modal, Button, Card } from 'antd';
+import { List, Tag, Typography, Modal, Button, Card, Table } from 'antd';
 import { Helmet } from 'react-helmet';
 import { ethers } from 'ethers';
 
@@ -15,12 +15,17 @@ import Address from '../../components/Address';
 
 const { connex } = createConnex('main');
 
-interface Meta {
+type Meta = {
   blockNumber: number;
   blockID: string;
 }
 
-interface Transaction {
+type Clauses = {
+  data: string;
+  to: string;
+}
+
+type Transaction = {
   dateTime: Date | number;
   reverted: boolean;
   gasPayer: string;
@@ -30,6 +35,7 @@ interface Transaction {
   meta: Meta;
   paid: string;
   reward: string;
+  clauses: Clauses[];
 };
 
 const initialTransaction = {
@@ -41,11 +47,25 @@ const initialTransaction = {
   origin: "",
   clauseCount: 0,
   reverted: false,
+  clauses: [
+    {
+      to: "",
+      data: ""
+    }
+  ],
   meta: {
     blockID: "",
     blockNumber: 0
-  }
+  },
 };
+
+const columns = [
+  {
+    title: 'To',
+    dataIndex: 'to',
+    key: 'to',
+  },
+];
 
 const QRCodeWrapper = styled.div`
   align-items: center;
@@ -83,6 +103,7 @@ function Show() {
   useEffect(() => {
     async function getTransactionData() {
       const { data } = await axios.get(`https://api.vexplorer.io/transactions/${id}`);
+        console.log(data)
       return data;
     };
 
@@ -188,6 +209,21 @@ function Show() {
                 <Value>
                   <Address address={item.gasPayer} />
                 </Value>
+              </List.Item>
+              <List.Item>
+                <Table
+                  columns={columns}
+                  style={{ width: '100%' }}
+                  dataSource={item.clauses}
+                  expandedRowRender={record => (
+                    <Fragment>
+                      <div>Data: </div>
+                      <Typography.Text style={{ margin: 0, wordBreak: 'break-all' }}>
+                        {record.data}
+                      </Typography.Text>
+                    </Fragment>
+                  )}
+                />
               </List.Item>
             </Fragment>
           )}
