@@ -66,11 +66,6 @@ const columns = [
       );
     }
   },
-  //{
-  //  title: 'VET',
-  //  dataIndex: 'balance',
-  //  key: 'balance',
-  //},
   {
     title: 'Age',
     dataIndex: 'dateTime',
@@ -78,17 +73,7 @@ const columns = [
     render: (text: number) => formatTime(text)
   },
   {
-    title: 'Block',
-    dataIndex: 'blockRef',
-    key: 'block',
-    render: (text: string) => {
-      const block = parseInt(text, 16);
-
-      return <Link to={`/block/${block}`}>{ block }</Link>
-    }
-  },
-  {
-    title: 'From',
+    title: 'Origin',
     dataIndex: 'origin',
     key: 'origin',
     render: (text: string) => <Address address={text} />
