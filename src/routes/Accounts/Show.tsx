@@ -161,7 +161,7 @@ function Show() {
     getAccount();
     getTokenBalances();
     getTokenTransfers();
-  }, [ savedAccounts, address ]);
+  }, [ savedAccounts, address, page ]);
 
   function showModal() {
     setVisible(true);
