@@ -40,7 +40,7 @@ function Transactions() {
   }, []);
 
   useEffect(() => {
-    const url = new URL('https://mercure.vexplorer.io/.well-known/mercure?topic=transaction-latest');
+    const url = new URL('https://api.vexplorer.io:1337/.well-known/mercure?topic=transaction-latest');
     //@ts-ignore
     const eventSource = new EventSource(url);
 
