@@ -6,6 +6,7 @@ import { uniqueId } from 'lodash';
 import { useLocalStorage } from 'react-use';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
+import qs from 'qs';
 
 import Address from '../../components/Address';
 import Balance from '../../components/Balance';
@@ -33,13 +34,15 @@ const columns = [
     title: 'VET',
     dataIndex: 'balance',
     key: 'balance',
-    render: (text: number) => <Balance balance={text} />
+    render: (text: number) => <Balance balance={text} />,
+    sorter: true,
   },
   {
     title: 'VTHO',
     dataIndex: 'energy',
     key: 'energy',
-    render: (text: number) => <Balance balance={text} />
+    render: (text: number) => <Balance balance={text} />,
+    sorter: true,
   },
   {
     title: 'Has Code',
@@ -54,6 +57,7 @@ function List() {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState({});
 
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -62,16 +66,21 @@ function List() {
   useEffect(() => {
     axios.get("https://api.vexplorer.io/accounts", {
       params: {
+        order: sort,
         page,
         itemsPerPage: 30,
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, { encodeValuesOnly: true });
       },
     }).then(({ data }) => {
       setAccounts(data["hydra:member"]);
       setLoading(false);
     });
-  }, [ page ]);
+  }, [ page, sort ]);
 
   function goBack() {
+    setLoading(true);
     setPage(currentPage => {
       const nextPage = currentPage - 1;
 
@@ -80,11 +89,23 @@ function List() {
   }
 
   function goForward() {
+    setLoading(true);
     setPage(currentPage => {
       const nextPage = currentPage + 1;
 
       return nextPage; 
     });
+  }
+
+  function handleTableChange(...params: any) {
+    const { order, field } = params[2];
+    setLoading(true);
+
+    if (order === 'ascend') {
+      setSort({ [field]: 'asc' });
+    } else {
+      setSort({ [field]: 'desc' });
+    }
   }
 
 
@@ -97,6 +118,7 @@ function List() {
         <TabPane tab="All Accounts" key="1">
           <Table
             rowKey={(record: Account) => uniqueId('account_')}
+            onChange={handleTableChange}
             pagination={false}
             loading={loading}
             dataSource={accounts}

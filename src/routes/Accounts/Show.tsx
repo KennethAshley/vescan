@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment, useContext } from 'react';
 import ReactGA from 'react-ga';
 import axios from 'axios';
 import QRCode from 'qrcode.react';
+import { format } from 'date-fns';
 import { useParams } from "react-router-dom";
 import styled from 'styled-components';
 import { useLocalStorage } from 'react-use';
@@ -76,38 +77,63 @@ const Value = styled.span`
   margin-left: 10px;
 `;
 
-const columns = [
-  {
-    title: 'Token',
-    dataIndex: 'token.name',
-    key: 'name',
-  },
-  {
-    title: 'From',
-    dataIndex: 'fromAddress',
-    key: 'from',
-    render: (text: string) => <Address address={text} />
-  },
-  {
-    title: 'To',
-    dataIndex: 'toAddress',
-    key: 'to',
-    render: (text: string) => <Address address={text} />
-  },
+function createColumns(address: string) {
+  return [
     {
-    title: 'Amount',
-    dataIndex: 'amount',
-    key: 'amount',
-    render: (text: number, record: any) => {
-      return (
-        <Fragment>
-          <Balance balance={text} />
-          <small>{ Numeral(text * record.token.price).format('$0,00.00') }</small>
-        </Fragment>
-      );
-    }
-  },
-];
+      title: 'Token',
+      dataIndex: 'token.name',
+      key: 'name',
+    },
+    {
+      title: 'Time',
+      dataIndex: 'transaction.dateTime',
+      key: 'dateTime',
+      render: (text: number) => formatTime(text),
+    },
+    {
+      title: 'From',
+      dataIndex: 'fromAddress',
+      key: 'from',
+      render: (text: string) => <Address address={text} />
+    },
+    {
+      title: 'To',
+      dataIndex: 'toAddress',
+      key: 'to',
+      render: (text: string) => <Address address={text} />
+    },
+    {
+      title: 'Type',
+      key: 'type',
+      render: (text: any, record: any) => {
+        if (record.toAddress === address) {
+          return 'Incoming'
+        }
+
+        if (record.fromAddress === address) {
+          return 'Outgoing'
+        }
+      }
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (text: number, record: any) => {
+        return (
+          <Fragment>
+            <Balance balance={text} />
+            <small>{ Numeral(text * record.token.price).format('$0,00.00') }</small>
+          </Fragment>
+        );
+      }
+    },
+  ]
+}
+
+function formatTime(date: number) {
+  return format(new Date(date), 'LLL dd yyyy HH:mm:ss');
+}
 
 function Show() {
   const [account, setAccount] = useState<Account[]>([]);
@@ -286,7 +312,7 @@ function Show() {
               pagination={false}
               loading={loading}
               dataSource={tokenTransfers}
-              columns={columns}
+              columns={createColumns(address)}
               footer={() => (
                 <Pagination>
                   <ButtonGroup>
