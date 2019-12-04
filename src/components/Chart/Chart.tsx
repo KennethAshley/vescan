@@ -1,5 +1,6 @@
 import axios from 'axios';
 import styled from 'styled-components';
+import Numeral from 'numeral';
 import { ResponsiveLine } from '@nivo/line'
 import { isEmpty, last } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -111,6 +112,35 @@ function Charts() {
               enableGridX={false}
               enableSlices={'x'}
               useMesh={true}
+              sliceTooltip={({ slice }: any) => {
+                return (
+                  <div
+                    style={{
+                      background: 'white',
+                      padding: '9px 12px',
+                      border: '1px solid #e8e8e8',
+                      borderRadius: '2px'
+                    }}
+                  >
+                    {slice.points.map((point: any) => (
+                      <div key={point.id}>
+                        <strong
+                          style={{
+                            color: point.serieColor,
+                            padding: '3px 0',
+                          }}
+                        >
+                          {point.serieId}
+                        </strong>
+                        {" "}
+                        <strong>
+                          {Numeral(point.data.yFormatted).format('0,0')}
+                        </strong>
+                      </div>
+                    ))}
+                  </div>
+                );
+              }}
             />
           }
         </Wrapper>
