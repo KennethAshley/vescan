@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { format, fromUnixTime } from 'date-fns'
 import { List, Tag, Card, Icon, Skeleton, Statistic } from 'antd';
-import Numeral from 'numeral';
 
 import Address from '../Address';
 

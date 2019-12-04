@@ -12,8 +12,13 @@ import Address from '../../components/Address';
 import Balance from '../../components/Balance';
 
 type Account = {
-  address: string
+  address: string;
 };
+
+type Sort = {
+  balance?: string;
+  energy?: string;
+}
 
 const Pagination = styled.div`
   display: flex;
@@ -57,7 +62,7 @@ function List() {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState({});
+  const [sort, setSort] = useState<Sort>({ balance: 'desc' });
 
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
