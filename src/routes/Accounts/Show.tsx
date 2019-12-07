@@ -166,10 +166,12 @@ function Show() {
     }
 
     async function getTokenTransfers() {
-      const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address}/token_transfers`, {
+      const { data } = await axios.get(`https://api.vexplorer.io/token_transfers`, {
         params: {
           page,
           itemsPerPage: 30,
+          fromAddress: address,
+          toAddress: address,
         },
       });
       setTokenTransfers(data["hydra:member"]);
