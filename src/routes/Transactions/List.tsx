@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useContext } from 'react';
 import ReactGA from 'react-ga';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,8 @@ import { uniqueId } from 'lodash';
 import { Table, Tabs, Button, Icon } from 'antd';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
+
+import { PriceContext } from '../../contexts/Price';
 
 import Address from '../../components/Address';
 import Balance from '../../components/Balance';
@@ -27,31 +29,33 @@ const Pagination = styled.div`
   justify-content: flex-end;
 `;
 
-const tokenTransfersColumns = [
-  {
-    title: 'Token',
-    dataIndex: 'token.name',
-    key: 'name',
-  },
-  {
-    title: 'From',
-    dataIndex: 'fromAddress',
-    key: 'from',
-    render: (text: string) => <Address address={text} />
-  },
-  {
-    title: 'To',
-    dataIndex: 'toAddress',
-    key: 'to',
-    render: (text: string) => <Address address={text} />
-  },
+function getTokenTransfersColumns(price: number) {
+  return [
     {
-    title: 'Amount',
-    dataIndex: 'amount',
-    key: 'amount',
-    render: (text: number) => <Balance balance={text} />
-  },
-];
+      title: 'Token',
+      dataIndex: 'token.name',
+      key: 'name',
+    },
+    {
+      title: 'From',
+      dataIndex: 'fromAddress',
+      key: 'from',
+      render: (text: string) => <Address address={text} />
+    },
+    {
+      title: 'To',
+      dataIndex: 'toAddress',
+      key: 'to',
+      render: (text: string) => <Address address={text} />
+    },
+      {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (text: number) => <Balance balance={text} price={price} />
+    },
+  ];
+};
 
 const columns = [
   {
@@ -94,7 +98,7 @@ function List() {
   const [tokenTransfers, setTokenTransfers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-
+  const price = useContext<any>(PriceContext);
 
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -179,7 +183,7 @@ function List() {
             pagination={false}
             loading={loading}
             dataSource={tokenTransfers}
-            columns={tokenTransfersColumns}
+            columns={getTokenTransfersColumns(price.vechain.usd)}
             footer={() => (
               <Pagination>
                 <ButtonGroup>

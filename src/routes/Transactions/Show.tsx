@@ -104,7 +104,6 @@ function Show() {
   useEffect(() => {
     async function getTransactionData() {
       const { data } = await axios.get(`https://api.vexplorer.io/transactions/${id}`);
-        console.log(data)
       return data;
     };
 

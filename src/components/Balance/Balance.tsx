@@ -10,7 +10,9 @@ type BalanceProps = {
 function Balance({ balance, suffix, price }: BalanceProps) {
   return (
     <div>
-      { Numeral(balance).format('0,0') }
+      <strong>
+        { Numeral(balance).format('0,0') }
+      </strong>
       { price &&
         <span>
           { " " }
