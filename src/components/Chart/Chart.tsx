@@ -4,7 +4,28 @@ import Numeral from 'numeral';
 import { ResponsiveLine } from '@nivo/line'
 import { isEmpty, last } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Button, Card, Icon, Statistic } from 'antd';
+
+import {
+  Button,
+  Card,
+  Col,
+  Icon,
+  Row,
+  Statistic,
+} from 'antd';
+
+import VTHOBurnedChart from './VTHOBurned';
+import VETTransferredChart from './VETTransferred';
+import VTHOTransferredChart from './VTHOTransferred';
+
+const ExtraCharts = styled.div`
+  margin-bottom: 32px;
+  .frappe-chart {
+    .x.axis text {
+      display: none;
+    }
+  }
+`;
 
 const Statistics = styled.div`
   display: flex;
@@ -26,6 +47,9 @@ function Charts() {
 
   const [clauses, setClauses] = useState({});
   const [transactions, setTransactions] = useState({});
+  const [VTHOBurned, setVTHOBurned] = useState({});
+  const [VTHOTransferred, setVTHOTransferred] = useState({});
+  const [VETTransferred, setVETTransferred] = useState({});
 
   useEffect(() => {
     axios.get("https://api.vexplorer.io/statistics/chart", {
@@ -33,6 +57,9 @@ function Charts() {
     }).then(({ data }) => {
       const cls = data.find((item: any) => item.id === 'Clauses');
       const txs = data.find((item: any) => item.id === 'Transactions');
+      const vthoBurned = data.find((item: any) => item.id === 'VTHO Burned');
+      const vthoTransferred = data.find((item: any) => item.id === 'VTHO Transferred');
+      const vetTransferred = data.find((item: any) => item.id === 'VET Transferred');
 
       // @ts-ignore
       const { y: txCount } = last(txs.data);
@@ -41,6 +68,9 @@ function Charts() {
 
       setClauses(cls);
       setTransactions(txs);
+      setVTHOBurned(vthoBurned);
+      setVETTransferred(vetTransferred);
+      setVTHOTransferred(vthoTransferred);
 
       setClauseCount(clsCount);
       setTransactionCount(txCount);
@@ -146,6 +176,25 @@ function Charts() {
         </Wrapper>
 
       </Card>
+      <ExtraCharts>
+        <Row gutter={12}>
+          <Col sm={24} md={8} lg={8}>
+            { !isEmpty(VETTransferred) &&
+              <VETTransferredChart chart={VETTransferred} />
+            }
+          </Col>
+          <Col sm={24} md={8} lg={8}>
+            { !isEmpty(VTHOTransferred) &&
+              <VTHOTransferredChart chart={VTHOTransferred} />
+            }
+          </Col>
+          <Col sm={24} md={8} lg={8}>
+            { !isEmpty(VTHOBurned) &&
+              <VTHOBurnedChart chart={VTHOBurned} />
+            }
+          </Col>
+        </Row>
+      </ExtraCharts>
 
     </Fragment>
   );
