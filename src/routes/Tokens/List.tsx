@@ -40,6 +40,8 @@ const columns = [
     dataIndex: 'address',
     key: 'icon',
     render: (text: string, record: any) => {
+      if (!text) return;
+
       return (
         <Image>
           <img

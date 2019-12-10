@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import { truncate } from 'lodash';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { List, Card, Icon, Skeleton, Typography } from 'antd';
+import { useMediaQuery } from 'react-responsive';
 
 type Transaction = {
    id: string;
@@ -26,6 +27,9 @@ function Transactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [itemLoading, setItemLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const isTabletOrMobile = useMediaQuery({
+    query: '(max-width: 768px)'
+  });
 
   useEffect(() => {
     axios.get("https://api.vexplorer.io/transactions", {
@@ -87,7 +91,15 @@ function Transactions() {
                 title={
                   <Typography.Text copyable={{ text: transaction.id }}>
                     <Link to={`/transaction/${transaction.id}`}>
-                      { truncate(transaction.id, { 'length': 50 }) }
+                      { isTabletOrMobile ? (
+                        <Fragment>
+                          { truncate(transaction.id, { 'length': 30 }) }
+                        </Fragment>
+                      ) : (
+                        <Fragment>
+                          { truncate(transaction.id, { 'length': 50 }) }
+                        </Fragment>
+                      )}
                     </Link>
                   </Typography.Text>
                 }

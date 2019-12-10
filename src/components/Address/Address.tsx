@@ -26,16 +26,16 @@ function Address({ address, link = true, prefix }: AddressProps) {
 
   return (
     <Typography.Text copyable={{ text: address }}>
-      { knownAddress &&
-        <div>
-          <small>{ knownAddress.label }</small>
-        </div>
-      }
-      { link ? (
-        <Link to={`/account/${address}`}>{ address }</Link>
-      ) : (
-        { address }
-      )}
+        { knownAddress &&
+          <div>
+            <small>{ knownAddress.label }</small>
+          </div>
+        }
+        { link ? (
+          <Link to={`/account/${address}`}>{ address }</Link>
+        ) : (
+            { address }
+        )}
    </Typography.Text>
   )
 }

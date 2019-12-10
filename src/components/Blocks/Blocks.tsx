@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { format, fromUnixTime } from 'date-fns'
 import { List, Tag, Card, Icon, Skeleton, Statistic } from 'antd';
+import { useMediaQuery } from 'react-responsive';
+import styled from 'styled-components';
 
 import Address from '../Address';
 
@@ -16,6 +18,26 @@ type Block = {
   signer: string; 
 };
 
+const ListItem = styled(List.Item)`
+  .ant-list-item-extra {
+    margin: 0 0 16px !important;
+  }
+`;
+
+const Value = styled.div`
+  .ant-typography  {
+    align-items: center;
+    display: flex;
+
+    a {
+      display: inline-block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 100%;
+    }
+  }
+`;
+
 const IconText = ({ type, text }: any) => (
 	<span>
 		<Icon type={type} style={{ marginRight: 8  }} />
@@ -27,6 +49,9 @@ function Blocks() {
   const [blocks, setBlocks] = useState<Block[]>([]);
   const [itemLoading, setItemLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const isTabletOrMobile = useMediaQuery({
+    query: '(max-width: 768px)'
+  });
 
   useEffect(() => {
     axios.get("https://api.vexplorer.io/blocks", {
@@ -86,15 +111,15 @@ function Blocks() {
         dataSource={blocks}
         renderItem={(block: Block, index) => (
           <Skeleton loading={index === 0 && itemLoading} active>
-            <List.Item 
+            <ListItem 
               extra={
                 <Tag color="blue">
                   <IconText type="number" text={`${block.transactionCount} txn(s)`} key="transactions" />
                 </Tag>
               }
               actions={[
-                <IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />,
-                <IconText type="fire" text={`${vthoBurned(block.gasUsed)} VTHO Burned`} key="vtho" />
+                <IconText type="fire" text={`${vthoBurned(block.gasUsed)} VTHO Burned`} key="vtho" />,
+                !isTabletOrMobile && <IconText type="clock-circle" text={formatTime(block.timestamp)} key="time" />
               ]}
             >
               <List.Item.Meta
@@ -111,11 +136,15 @@ function Blocks() {
                   </Fragment>
                 }
               />
-              <div>
-                <small>Signer: </small>
-              </div>
-              <Address address={block.signer} />
-            </List.Item>
+                <Fragment>
+                  <div>
+                    <small>Signer: </small>
+                  </div>
+                  <Value>
+                    <Address address={block.signer} />
+                  </Value>
+                </Fragment>
+            </ListItem>
           </Skeleton>
         )}
       />
