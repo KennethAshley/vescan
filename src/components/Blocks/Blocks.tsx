@@ -140,9 +140,13 @@ function Blocks() {
                   <div>
                     <small>Signer: </small>
                   </div>
-                  <Value>
+                  { isTabletOrMobile ? (
+                    <Value>
+                      <Address address={block.signer} />
+                    </Value>
+                  ) : (
                     <Address address={block.signer} />
-                  </Value>
+                  )}
                 </Fragment>
             </ListItem>
           </Skeleton>
