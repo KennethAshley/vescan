@@ -6,14 +6,17 @@ import { useParams } from "react-router-dom";
 import { format } from 'date-fns'
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { List, Tag, Typography, Modal, Button, Card, Table, Divider } from 'antd';
+import { List, Tag, Typography, Modal, Button, Card, Table, Divider, Tabs } from 'antd';
 import { Helmet } from 'react-helmet';
 import { ethers } from 'ethers';
 import { uniqueId } from 'lodash';
+import { abi } from 'thor-devkit/dist/abi';
 
 import { createConnex } from '../../create-connex';
 import Address from '../../components/Address';
+import Decoded from '../../components/Decoded';
 
+const { TabPane } = Tabs;
 const { connex } = createConnex('main');
 
 type Meta = {
@@ -38,6 +41,12 @@ type Transaction = {
   reward: string;
   clauses: Clauses[];
 };
+
+const Abi = {
+  json: null as abi.Function.Definition | abi.Event.Definition | null,
+  loading: false,
+  error: null as Error | null,
+}
 
 const initialTransaction = {
   dateTime: 0,
@@ -93,10 +102,14 @@ function Show() {
   const [transaction, setTransaction] = useState<Transaction[]>([initialTransaction]);
   //const [receipt, setReceipt] = useState();
   const [visible, setVisible] = useState(false);
+  const [abi, setAbi] = useState(Abi);
   //const [loading, setLoading] = useState(true);
 
   // @ts-ignore
   const { id } = useParams<string>();
+
+  useEffect(() => {
+  }, []);
 
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -105,6 +118,7 @@ function Show() {
   useEffect(() => {
     async function getTransactionData() {
       const { data } = await axios.get(`https://api.vexplorer.io/transactions/${id}`);
+
       return data;
     };
 
@@ -119,6 +133,7 @@ function Show() {
       getTransactionData(),
       getReceipt()
     ]).then(([data, receipt]) => {
+
       setTransaction([{
         ...data,
         ...receipt,
@@ -219,12 +234,16 @@ function Show() {
                   style={{ width: '100%' }}
                   dataSource={item.clauses}
                   expandedRowRender={record => (
-                    <Fragment>
-                      <div>Data: </div>
-                      <Typography.Text style={{ margin: 0, wordBreak: 'break-all' }}>
-                        {record.data}
-                      </Typography.Text>
-                    </Fragment>
+                    <Tabs>
+                      <TabPane tab="Raw" key="1">
+                        <Typography.Text style={{ margin: 0, wordBreak: 'break-all' }}>
+                          {record.data}
+                        </Typography.Text>
+                      </TabPane>
+                      <TabPane tab="Decoded" key="2">
+                        <Decoded value={record} />
+                      </TabPane>
+										</Tabs>
                   )}
                 />
               </List.Item>

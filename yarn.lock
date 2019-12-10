@@ -11220,7 +11220,7 @@ text-table@0.2.0, text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-thor-devkit@^1.1.0:
+thor-devkit@^1.1.0, thor-devkit@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/thor-devkit/-/thor-devkit-1.2.3.tgz#94f3e56956a8eb4e16c6b064a5bfc5978f0c9d31"
   integrity sha512-zR6ysUJi8m+NODmqf8RWjYRcRoxDYOHNsfPpKOVWzdJIiIyw8b9tcNfGyjec68qSdGCM0USVIdqKEjuIeGStxQ==
