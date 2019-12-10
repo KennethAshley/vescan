@@ -10,6 +10,12 @@ import styled from 'styled-components';
 
 import Address from '../../components/Address';
 
+const Wrapper = styled.span`
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
 const Pagination = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -50,8 +56,10 @@ const columns = [
       return (
         <Fragment>
           <Typography.Text strong>{ text }</Typography.Text>
-          <small> ({percent}%)</small>
-          <Progress percent={percent} size="small" showInfo={false} />
+          <Wrapper>
+            <small> ({percent}%)</small>
+            <Progress percent={percent} size="small" showInfo={false} />
+          </Wrapper>
         </Fragment>
       );
     }

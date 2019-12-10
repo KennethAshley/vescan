@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import ResponsiveAntMenu from 'responsive-ant-menu';
 import { Menu as AntMenu, Icon, Button } from 'antd';
+import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -18,6 +19,9 @@ const AntMenuStyled = styled(AntMenu)`
 
 function Menu() {
   const [hasConnex, setHasConnex] = useState(false);
+  const isTabletOrMobile = useMediaQuery({
+    query: '(max-width: 768px)'
+  });
 
   useEffect(() => {
     if (window.connex) {
@@ -35,7 +39,7 @@ function Menu() {
           <Button icon="menu" />
         )}
 				menuClassName={'responsive-ant-menu'}
-        mode="vertical"
+        mode={isTabletOrMobile ? "vertical" : "horizontal"}
 			>
         {() => (
           <AntMenuStyled mode="horizontal">

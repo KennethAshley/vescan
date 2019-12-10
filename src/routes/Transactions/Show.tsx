@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { List, Tag, Typography, Modal, Button, Card, Table, Divider } from 'antd';
 import { Helmet } from 'react-helmet';
 import { ethers } from 'ethers';
+import { uniqueId } from 'lodash';
 
 import { createConnex } from '../../create-connex';
 import Address from '../../components/Address';
@@ -213,6 +214,7 @@ function Show() {
               <Divider>Clauses</Divider>
               <List.Item>
                 <Table
+                  rowKey={(record: Clauses) => uniqueId('transaction_show_')}
                   columns={columns}
                   style={{ width: '100%' }}
                   dataSource={item.clauses}

@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { createGlobalStyle } from 'styled-components';
 import {
   BrowserRouter as Router,
   Switch,
@@ -35,13 +34,7 @@ import Search from './components/Search';
 
 import 'antd/dist/antd.css';
 import './index.css';
-
-const GlobalStyle = createGlobalStyle`
-  .container {
-    margin: 0 auto;
-    max-width: 1280px;
-  }
-`;
+import AppStyled from './App.styled';
 
 function App() {
   return (
@@ -83,7 +76,7 @@ function App() {
           </Switch>
         </Layout>
       </Router>
-      <GlobalStyle />
+      <AppStyled />
     </Fragment>
   );
 }
