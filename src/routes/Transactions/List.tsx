@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 import { truncate } from 'lodash';
 import { format } from 'date-fns'
 import { uniqueId } from 'lodash';
-import { Table, Tabs, Button, Icon } from 'antd';
+import { Table, Tabs, Button, Icon, Input } from 'antd';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
+import qs from 'qs';
 
 import { PriceContext } from '../../contexts/Price';
 
@@ -22,40 +23,13 @@ type TokenTransfer = {
 }
 
 const { TabPane } = Tabs;
+const { Search } = Input;
 const ButtonGroup = Button.Group;
 
 const Pagination = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
-
-function getTokenTransfersColumns(price: number) {
-  return [
-    {
-      title: 'Token',
-      dataIndex: 'token.name',
-      key: 'name',
-    },
-    {
-      title: 'From',
-      dataIndex: 'fromAddress',
-      key: 'from',
-      render: (text: string) => <Address address={text} />
-    },
-    {
-      title: 'To',
-      dataIndex: 'toAddress',
-      key: 'to',
-      render: (text: string) => <Address address={text} />
-    },
-      {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
-      render: (text: number) => <Balance balance={text} price={price} />
-    },
-  ];
-};
 
 const columns = [
   {
@@ -96,8 +70,10 @@ function formatTime(time: number) {
 function List() {
   const [transactions, setTransactions] = useState([]);
   const [tokenTransfers, setTokenTransfers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [transactionsLoading, setTransactionsLoading] = useState(true);
+  const [transfersLoading, setTransfersLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [amount, setAmount] = useState<number | string>(0);
   const price = useContext<any>(PriceContext);
 
   useEffect(() => {
@@ -106,31 +82,42 @@ function List() {
 
   useEffect(() => {
     async function getTransactions() {
+      setTransactionsLoading(true);
+
       const { data } = await axios.get("https://api.vexplorer.io/transactions", {
         params: {
           page,
           itemsPerPage: 30,
-        }
+        },
       });
 
-      setLoading(false);
+      setTransactionsLoading(false);
       setTransactions(data["hydra:member"]);
     }
 
     async function getTransfers() {
+      setTransfersLoading(true);
+
       const { data } = await axios.get("https://api.vexplorer.io/token_transfers", {
         params: {
           page,
+          amount: {
+            gt: amount,
+          },
           itemsPerPage: 30,
-        }
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, { encodeValuesOnly: true });
+        },
       });
 
+      setTransfersLoading(false);
       setTokenTransfers(data["hydra:member"]);
     }
 
     getTransfers();
     getTransactions();
-  }, [ page ]);
+  }, [ page, amount ]);
 
   function goBack() {
     setPage(currentPage => {
@@ -140,6 +127,10 @@ function List() {
     });
   }
 
+  function handleSearch(value: number | string) {
+    setAmount(value);
+  }
+
   function goForward() {
     setPage(currentPage => {
       const nextPage = currentPage + 1;
@@ -147,6 +138,45 @@ function List() {
       return nextPage; 
     });
   }
+
+  function getTokenTransfersColumns(price: number) {
+    return [
+      {
+        title: 'Token',
+        dataIndex: 'token.name',
+        key: 'name',
+      },
+      {
+        title: 'From',
+        dataIndex: 'fromAddress',
+        key: 'from',
+        render: (text: string) => <Address address={text} />
+      },
+      {
+        title: 'To',
+        dataIndex: 'toAddress',
+        key: 'to',
+        render: (text: string) => <Address address={text} />
+      },
+        {
+        title: 'Amount',
+        dataIndex: 'amount',
+        key: 'amount',
+        render: (text: number) => <Balance balance={text} price={price} />,
+        filterDropdown: () => (
+          <div style={{ padding: 8 }}>
+            <Search
+              type="number"
+              onSearch={handleSearch}
+              enterButton="Search"
+              placeholder="Filter Large Transactions"
+              style={{ width: 300, display: 'block' }}
+            />
+          </div>
+        )
+      },
+    ];
+  };
 
   return (
     <Fragment>
@@ -158,7 +188,7 @@ function List() {
           <Table
             rowKey={(record: Transaction) => uniqueId('transaction_')}
             pagination={false}
-            loading={loading}
+            loading={transactionsLoading}
             dataSource={transactions}
             columns={columns}
             footer={() => (
@@ -181,7 +211,7 @@ function List() {
           <Table
             rowKey={(record: TokenTransfer) => uniqueId('transfer_')}
             pagination={false}
-            loading={loading}
+            loading={transfersLoading}
             dataSource={tokenTransfers}
             columns={getTokenTransfersColumns(price.vechain.usd)}
             footer={() => (
