@@ -4,6 +4,7 @@ import axios from 'axios';
 import qs from 'qs';
 import styled from 'styled-components';
 import { uniqueId } from 'lodash';
+import Numeral from 'numeral';
 
 import { PriceContext } from '../../contexts/Price';
 
@@ -131,7 +132,17 @@ function Transfers(props: TransfersProps) {
     <Card
       title={title}
       style={{ marginBottom: '32px' }}
-      extra={`Currently set to transfers greater than ${amount} VET`}
+      extra={
+        <Fragment>
+          <span>
+            Currently set to transfers greater than
+            {` `}
+            { Numeral(Number(amount)).format('0,0') }
+            {` `}
+            VET
+          </span>
+        </Fragment>
+      }
     >
       <Table
         size={size}
