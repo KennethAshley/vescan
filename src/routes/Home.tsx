@@ -7,6 +7,7 @@ import Blocks from '../components/Blocks';
 import Chart from '../components/Chart';
 import Stats from '../components/Stats';
 import Transactions from '../components/Transactions';
+import Transfers from '../components/Transfers';
 
 function Home() {
   useEffect(() => {
@@ -21,6 +22,12 @@ function Home() {
 
       <Chart />
       <Stats />
+      <Transfers
+        limit={10}
+        amount={1000000}
+        title="Large Transfers"
+        pagination={false}
+      />
       <Row gutter={16}>
         <Col sm={24} md={24} lg={12}>
           <Blocks />
