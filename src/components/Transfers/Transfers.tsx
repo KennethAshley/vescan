@@ -115,7 +115,6 @@ function Transfers(props: TransfersProps) {
         filterDropdown: () => (
           <div style={{ padding: 8 }}>
             <Search
-              value={amount}
               type="number"
               onSearch={handleSearch}
               enterButton="Search"
@@ -129,7 +128,11 @@ function Transfers(props: TransfersProps) {
   };
 
   return (
-    <Card title={title} style={{ marginBottom: '32px' }}>
+    <Card
+      title={title}
+      style={{ marginBottom: '32px' }}
+      extra={`Currently set to transfers greater than ${amount} VET`}
+    >
       <Table
         size={size}
         rowKey={(record: TokenTransfer) => uniqueId('transfer_')}
