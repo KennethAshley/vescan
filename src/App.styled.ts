@@ -19,6 +19,10 @@ export default createGlobalStyle`
       border-collapse: collapse;
       border-spacing: 0;
     }
+
+    .ant-card-head-wrapper {
+      flex-direction: column;
+    }
   }
 `;
 
