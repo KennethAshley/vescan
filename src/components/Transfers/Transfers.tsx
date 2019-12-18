@@ -1,9 +1,9 @@
 import React, { useEffect, useState, Fragment, useContext } from 'react';
-import { Card, Table, Input, Button, Icon } from 'antd';
+import { Card, Table, Button, Icon, InputNumber } from 'antd';
 import axios from 'axios';
 import qs from 'qs';
 import styled from 'styled-components';
-import { uniqueId } from 'lodash';
+import { uniqueId, debounce } from 'lodash';
 import Numeral from 'numeral';
 
 import { PriceContext } from '../../contexts/Price';
@@ -34,7 +34,6 @@ const Pagination = styled.div`
   justify-content: flex-end;
 `;
 
-const { Search } = Input;
 const ButtonGroup = Button.Group;
 
 function Transfers(props: TransfersProps) {
@@ -69,8 +68,8 @@ function Transfers(props: TransfersProps) {
     getTransfers();
   }, [ page, amount, limit ])
 
-  function handleSearch(value: number | string) {
-    setAmount(value)
+  function handleSearch(value: any) {
+    setAmount(value);
   }
 
   function goBack() {
@@ -115,12 +114,12 @@ function Transfers(props: TransfersProps) {
         render: (text: number) => <Balance balance={text} price={price} />,
         filterDropdown: () => (
           <div style={{ padding: 8 }}>
-            <Search
-              type="number"
-              onSearch={handleSearch}
-              enterButton="Search"
+            <InputNumber
+              onChange={debounce(handleSearch, 1000)}
+              formatter={value => Numeral(value).format('0,0')}
+              defaultValue={Number(amount)}
               placeholder="Filter Large Transactions"
-              style={{ width: 300, display: 'block' }}
+              style={{ width: 200, display: 'block' }}
             />
           </div>
         )
@@ -139,7 +138,6 @@ function Transfers(props: TransfersProps) {
             {` `}
             { Numeral(Number(amount)).format('0,0') }
             {` `}
-            VET
           </span>
         </Fragment>
       }
