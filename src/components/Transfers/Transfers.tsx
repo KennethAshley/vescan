@@ -111,7 +111,9 @@ function Transfers(props: TransfersProps) {
         title: 'Amount',
         dataIndex: 'amount',
         key: 'amount',
-        render: (text: number) => <Balance balance={text} price={price} />,
+        render: (text: number, record: any) => (
+          <Balance balance={text} price={record.token.price} />
+        ),
         filterDropdown: () => (
           <div style={{ padding: 8 }}>
             <InputNumber
