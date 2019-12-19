@@ -4,9 +4,17 @@ import styled from 'styled-components';
 import { format } from 'date-fns';
 import { ResponsiveLine } from '@nivo/line';
 import Numeral from 'numeral';
+import { last } from 'lodash';
 
 const Wrapper = styled.div`
   height: 200px;
+`;
+
+const Current = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 function formatDate(date: Date) {
@@ -14,8 +22,19 @@ function formatDate(date: Date) {
 }
 
 function VTHOTransferred({ chart: data }: any) {
+  //@ts-ignore
+  const { y: currentTransfer } = last(data.data);
+
   return (
     <Card title="VTHO Transferred">
+      <Current>
+        Current Transfer
+        <div>
+          <strong>
+            { Numeral(currentTransfer).format('0,0') }
+          </strong>
+        </div>
+      </Current>
       <Wrapper>
         <ResponsiveLine
           data={[

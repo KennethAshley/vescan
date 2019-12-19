@@ -4,9 +4,17 @@ import styled from 'styled-components';
 import Numeral from 'numeral';
 import { format } from 'date-fns';
 import { ResponsiveLine } from '@nivo/line';
+import { last } from 'lodash';
 
 const Wrapper = styled.div`
   height: 200px;
+`;
+
+const Current = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 function formatDate(date: Date) {
@@ -14,8 +22,20 @@ function formatDate(date: Date) {
 }
 
 function VTHOBurned({ chart: data }: any) {
+  //@ts-ignore
+  const { y: currentBurn } = last(data.data);
+
   return (
     <Card title="VTHO Burned">
+      <Current>
+        Current Burn
+        <div>
+          <strong>
+            { Numeral(currentBurn).format('0,0') }
+          </strong>
+        </div>
+      </Current>
+
       <Wrapper>
         <ResponsiveLine
           data={[
