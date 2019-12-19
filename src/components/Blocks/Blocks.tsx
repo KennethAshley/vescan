@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { format, fromUnixTime } from 'date-fns'
+import { format, fromUnixTime } from 'date-fns';
 import { List, Tag, Card, Icon, Skeleton, Statistic } from 'antd';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';

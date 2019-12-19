@@ -2,11 +2,16 @@ import React from 'react';
 import { Card } from 'antd';
 import styled from 'styled-components';
 import Numeral from 'numeral';
+import { format } from 'date-fns';
 import { ResponsiveLine } from '@nivo/line';
 
 const Wrapper = styled.div`
   height: 200px;
 `;
+
+function formatDate(date: Date) {
+  return format(new Date(date), 'MMM dd yyyy');
+}
 
 function VTHOBurned({ chart: data }: any) {
   return (
@@ -49,6 +54,9 @@ function VTHOBurned({ chart: data }: any) {
                     borderRadius: '2px'
                   }}
                 >
+                  <strong>
+                    { formatDate(slice.points[0].data.xFormatted) }
+                  </strong>
                   {slice.points.map((point: any) => (
                     <div key={point.id}>
                       <strong

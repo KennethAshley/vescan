@@ -50,7 +50,7 @@ const columns = [
     sorter: true,
   },
   {
-    title: 'Has Code',
+    title: 'Contract',
     dataIndex: 'code',
     key: 'code',
     render: (text: string) => text ? 'True' : 'False',

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import Numeral from 'numeral';
+import { format } from 'date-fns';
 import { ResponsiveLine } from '@nivo/line'
 import { isEmpty, last } from 'lodash';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -39,6 +40,10 @@ const Statistics = styled.div`
 const Wrapper = styled.div`
   height: 400px;
 `;
+
+function formatDate(date: Date) {
+  return format(new Date(date), 'MMM dd yyyy');
+}
 
 function Charts() {
   const [zoom, setZoom] = useState('1month');
@@ -152,6 +157,9 @@ function Charts() {
                       borderRadius: '2px'
                     }}
                   >
+                    <strong>
+                      { formatDate(slice.points[0].data.xFormatted) }
+                    </strong>
                     {slice.points.map((point: any) => (
                       <div key={point.id}>
                         <strong
