@@ -53,7 +53,7 @@ const columns = [
     title: 'Contract',
     dataIndex: 'code',
     key: 'code',
-    render: (text: string) => text ? 'True' : 'False',
+    render: (text: string) => text ? 'Yes' : 'No',
   },
 ];
 
