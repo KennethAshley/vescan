@@ -158,7 +158,6 @@ function Show() {
     async function getAccount() {
       const { data } = await axios.get(`https://api.vexplorer.io/accounts/${address.toLowerCase()}`);
 
-      console.log(data);
       setAccount([{
         balance: data.balance,
         code: data.code,

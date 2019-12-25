@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment, useContext } from 'react';
-import { Card, Table, Button, Icon, InputNumber } from 'antd';
+import { Card, Table, Button, Icon, InputNumber, Select } from 'antd';
 import axios from 'axios';
 import qs from 'qs';
 import styled from 'styled-components';
@@ -35,6 +35,7 @@ const Pagination = styled.div`
 `;
 
 const ButtonGroup = Button.Group;
+const { Option } = Select;
 
 function Transfers(props: TransfersProps) {
   const price = useContext<any>(PriceContext);
@@ -42,6 +43,7 @@ function Transfers(props: TransfersProps) {
   const [amount, setAmount] = useState<number | string>(props.amount);
   const [page, setPage] = useState(1);
   const [tokenTransfers, setTokenTransfers] = useState([]);
+  const [tokens, setTokens] = useState([]);
   const { title, pagination, limit, size } = props;
 
   useEffect(() => {
@@ -54,6 +56,7 @@ function Transfers(props: TransfersProps) {
           amount: {
             gt: amount,
           },
+          'token.symbol': tokens,
           itemsPerPage: limit,
         },
         paramsSerializer: (params) => {
@@ -66,10 +69,14 @@ function Transfers(props: TransfersProps) {
     }
 
     getTransfers();
-  }, [ page, amount, limit ])
+  }, [ page, amount, limit, tokens ])
 
   function handleSearch(value: any) {
     setAmount(value);
+  }
+
+  function handleSelect(value: any) {
+    setTokens(value);
   }
 
   function goBack() {
@@ -94,6 +101,32 @@ function Transfers(props: TransfersProps) {
         title: 'Token',
         dataIndex: 'token.name',
         key: 'name',
+        filterDropdown: () => (
+          <div style={{ padding: 8 }}>
+            <Select
+              showSearch
+              style={{ width: 400 }}
+              mode="multiple"
+              placeholder="Select a token"
+              onChange={handleSelect}
+            >
+              <Option value="VET">VET</Option>
+              <Option value="VTHO">VTHO</Option>
+              <Option value="OCE">OCE</Option>
+              <Option value="SHA">SHA</Option>
+              <Option value="PLA">PLA</Option>
+              <Option value="DBET">DBET</Option>
+              <Option value="EHRT">EHRT</Option>
+              <Option value="HAI">HAI</Option>
+              <Option value="AQD">AQD</Option>
+              <Option value="JUR">JUR</Option>
+              <Option value="SNKr">SNK</Option>
+              <Option value="BAG">BAG</Option>
+              <Option value="STAR">STAR</Option>
+              <Option value="YEET">YEET</Option>
+            </Select>
+          </div>
+        ),
       },
       {
         title: 'From',

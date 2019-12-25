@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { truncate } from 'lodash';
 import { format } from 'date-fns'
 import { uniqueId } from 'lodash';
-import { Table, Tabs, Button, Icon, Input } from 'antd';
+import { Table, Tabs, Button, Icon, Input, Select } from 'antd';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import qs from 'qs';
@@ -24,6 +24,7 @@ type TokenTransfer = {
 
 const { TabPane } = Tabs;
 const { Search } = Input;
+const { Option } = Select;
 const ButtonGroup = Button.Group;
 
 const Pagination = styled.div`
@@ -74,6 +75,7 @@ function List() {
   const [transfersLoading, setTransfersLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [amount, setAmount] = useState<number | string>(0);
+  const [tokens, setTokens] = useState([]);
   const price = useContext<any>(PriceContext);
 
   useEffect(() => {
@@ -104,6 +106,7 @@ function List() {
           amount: {
             gt: amount,
           },
+          'token.symbol': tokens,
           itemsPerPage: 30,
         },
         paramsSerializer: (params) => {
@@ -117,7 +120,7 @@ function List() {
 
     getTransfers();
     getTransactions();
-  }, [ page, amount ]);
+  }, [ page, amount, tokens ]);
 
   function goBack() {
     setPage(currentPage => {
@@ -129,6 +132,10 @@ function List() {
 
   function handleSearch(value: number | string) {
     setAmount(value);
+  }
+
+  function handleSelect(value: any) {
+    setTokens(value);
   }
 
   function goForward() {
@@ -145,6 +152,38 @@ function List() {
         title: 'Token',
         dataIndex: 'token.name',
         key: 'name',
+        filters: [
+          {
+            text: 'Joe',
+            value: 'Joe',
+          }
+        ],
+        filterDropdown: () => (
+          <div style={{ padding: 8 }}>
+            <Select
+              showSearch
+              style={{ width: 400 }}
+              mode="multiple"
+              placeholder="Select a token"
+              onChange={handleSelect}
+            >
+              <Option value="VET">VET</Option>
+              <Option value="VTHO">VTHO</Option>
+              <Option value="OCE">OCE</Option>
+              <Option value="SHA">SHA</Option>
+              <Option value="PLA">PLA</Option>
+              <Option value="DBET">DBET</Option>
+              <Option value="EHRT">EHRT</Option>
+              <Option value="HAI">HAI</Option>
+              <Option value="AQD">AQD</Option>
+              <Option value="JUR">JUR</Option>
+              <Option value="SNKr">SNK</Option>
+              <Option value="BAG">BAG</Option>
+              <Option value="STAR">STAR</Option>
+              <Option value="YEET">YEET</Option>
+            </Select>
+          </div>
+        ),
       },
       {
         title: 'From',
@@ -173,7 +212,7 @@ function List() {
               style={{ width: 300, display: 'block' }}
             />
           </div>
-        )
+        ),
       },
     ];
   };
